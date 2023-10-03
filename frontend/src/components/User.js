@@ -22,6 +22,7 @@ function User() {
         </div>
       </div>
       <div className='col-md-9'>
+        <h1>Bienvenido(a) a la página de Administrador </h1>
           <p className='centered-paragraph'>
             Somos una comunidad enfocada a contribuir un bien en la sociedad, <br />
             debido a que ayudamos a personas sordomudas mediante nuestra <br /> 

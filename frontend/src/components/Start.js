@@ -20,6 +20,7 @@ function Start() {
          </div>
       </div>
       <div className='col-md-9'>
+          
           <p className='centered-paragraph'>
             Somos una comunidad enfocada a contribuir un bien en la sociedad, debido a que ayudamos a personas sordomudas mediante nuestra aplicación móvil creada con Swift UI. El propósito de la aplicación es enseñar al usuario la lengua de señas. Se usará un modelo CO-ML el cual reconoce imágenes, así como se dará el significado de la palabra y ejercicios para hacer el método de aprendizaje más entretenido y didáctico.
           </p>

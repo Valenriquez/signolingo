@@ -2,14 +2,13 @@
 
 .centered-paragraph {
   text-align: left; /* Center the text to the left */
-  margin: 20px; /* Add margin to all sides of the paragraph */
+  margin: 40px; /* Add margin to all sides of the paragraph */
   padding: 10px; /* Add padding to all sides of the paragraph */
   font-family:'Times New Roman', Times, serif;
   font-size: 16px; /* Adjust the font size to make it smaller */
   text-align: justify; /* Justify the text */
   line-height: 1.5;    
-  top: 10;  
-}
+ }
 
 .navbar {
   position: absolute;
