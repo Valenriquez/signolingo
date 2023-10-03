@@ -1,0 +1,18 @@
+/* Style for the left side (categories and words) */
+.left-side {
+    float: left;
+    width: 50%; /* You can adjust the width as needed */
+}
+
+/* Style for the right side (searcher) */
+.right-side {
+    float: right;
+    width: 50%; /* You can adjust the width as needed */
+}
+
+/* Clear the floats to prevent layout issues */
+.clearfix::after {
+    content: "";
+    clear: both;
+    display: table;
+}

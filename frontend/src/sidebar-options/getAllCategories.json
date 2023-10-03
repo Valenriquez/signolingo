@@ -1,0 +1,28 @@
+{
+    "categories": [
+      {
+        "id": 1,
+        "name": "Deportes",
+        "color": "red",
+        "icon": "iconDeportes.jpg"  
+      },
+      {
+        "id": 2,
+        "name": "Frutas",
+        "color": "blue",
+        "icon": "iconFrutas.jpg"
+      },
+      {
+        "id": 3,
+        "name": "addName",
+        "color": "add",
+        "icon": "iconUpdate.jpg"
+      },
+      {
+        "id": 5,
+        "name": "addingName",
+        "color": "green",
+        "icon": "iconAdded.webp"
+      }
+    ]
+  }

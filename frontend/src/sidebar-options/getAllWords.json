@@ -1,0 +1,35 @@
+{
+    "words": [
+      {
+        "id": 1,
+        "word": "Fútbol",
+        "categoryid": 1,
+        "definition": "Es un deporte conocido",
+        "image": "image.jpg",
+        "suggested1": "rojo",
+        "suggested2": "blanco",
+        "video": "video.com"
+      },
+      {
+        "id": 2,
+        "word": "Manzana",
+        "categoryid": 2,
+        "definition": "Es una fruta roja y muy rica",
+        "image": "image.jpg",
+        "suggested1": "rojo",
+        "suggested2": "blanco",
+        "video": "video.com"
+      },
+      {
+        "id": 3,
+        "word": "Sandía",
+        "categoryid": 2,
+        "definition": "Es una fruta roja con mucha agua",
+        "image": "image.jpg",
+        "suggested1": "rojo",
+        "suggested2": "verde",
+        "video": "sandía.com"
+      }
+      
+    ]
+  }
