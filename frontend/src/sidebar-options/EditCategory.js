@@ -3,7 +3,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 import NavbarUser from '../components/NavbarUser';
 import Sidebar from '../components/Sidebar';
- import jsonData from './getAllCategories.json';
+import jsonData from './getAllCategories.json';
 import words from './getAllWords.json';
 import axios from 'axios';
 
@@ -11,17 +11,27 @@ import axios from 'axios';
  
 function EditCategory() {
   const [categories, setCategories] = useState([]);
+  const [selectedCategory, setSelectedCategory] = useState(null);
+  const [formData, setFormData] = useState({
+    name: '',
+    color: '',
+    icon: '',
+    idsettings: 0,
+    isscannable: false,
+  });
+  const [editMode, setEditMode] = useState(false);
 
   useEffect(() => {
-    const apiUrl = 'https://vc5kqp87-3000.usw3.devtunnels.ms/api/v1/categories/getall';
-    axios.get(apiUrl)
-      .then(response => {
+    // Fetch categories from the API
+    axios.get('https://vc5kqp87-3000.usw3.devtunnels.ms/api/v1/categories/getall')
+      .then((response) => {
         setCategories(response.data);
       })
-      .catch(error => {
-        console.error('Error fetching data:', error);
+      .catch((error) => {
+        console.error('Error fetching categories:', error);
       });
   }, []);
+
   
   const buttons = [
     { label: 'Crear Categoría', link: '/create-category' },
@@ -41,62 +51,57 @@ function EditCategory() {
   const categoriesArray = jsonData.categories;
   const wordsArray = words.words;
 
-  const [categoryData, setcategoryData] = useState({
-    name: '',
-    image: null, // Use null to store the selected file
-    icon: null,
-    color: null, // Use null to store the selected file
-    idsettings: 1,
-    isscannable: false,
-  });
 
-  const handleChange = (e) => {
-    const { name, value, type } = e.target;
-    setcategoryData({
-      ...categoryData,
-      [name]: type === 'checkbox' ? e.target.checked : value,
+  const handleCategorySelect = (category) => {
+    setSelectedCategory(category);
+    setFormData({
+      name: category.name,
+      color: category.color,
+      icon: category.icon,
+      idsettings: category.idsettings,
+      isscannable: category.isscannable,
+    });
+    setEditMode(true);
+  };
+
+  const handleInputChange = (e) => {
+    const { name, value, type, checked } = e.target;
+    setFormData({
+      ...formData,
+      [name]: type === 'checkbox' ? checked : value,
     });
   };
 
-  const handleFileChange = (e) => {
-    const { name, files } = e.target;
-    setcategoryData({
-      ...categoryData,
-      [name]: files[0], // Store the selected file in state
-    });
-  };
-
-  function resetForm() {
-    setcategoryData({
-      ...categoryData,
-      image: null, // Clear selected image
-      audio: null, // Clear selected audio
-      video: null, // Clear selected video
-    });
-  }
-
-  const handleSubmit = (e) => {
+  const handleFormSubmit = (e) => {
     e.preventDefault();
-
-    // Create a FormData object to send the file data
-    const formData = new FormData();
-    formData.append('image', categoryData.image);
-    formData.append('color', categoryData.color);
-    formData.append('icon', categoryData.icon);
-      formData.append('idsettings', categoryData.idsettings);
-    formData.append('isscannable', categoryData.isscannable);
-
-    // Define the URL where you want to send the POST request
-    const apiUrl = "https://vc5kqp87-3000.usw3.devtunnels.ms/api/v1/categories/add";
-
-    // Send the POST request using Axios
-    axios.post(apiUrl, formData)
-      .then(function (response) {
-        console.log('Word added successfully:', response.data);
-      })
-      .catch(function (error) {
-        console.error('Error adding word:', error);
-      });
+    if (selectedCategory) {
+      // Send a PUT request to update the selected category
+      axios.put(`https://vc5kqp87-3000.usw3.devtunnels.ms/api/v1/categories/update/${selectedCategory.id}`, formData)
+        .then((response) => {
+          console.log('Updated Category:', response.data);
+          // Update the local categories list with the updated category data
+          const updatedCategories = categories.map((category) => {
+            if (category.id === response.data.id) {
+              return response.data;
+            }
+            return category;
+          });
+          setCategories(updatedCategories);
+          // Clear the form and exit edit mode
+          setFormData({
+            name: '',
+            color: '',
+            icon: '',
+            idsettings: 0,
+            isscannable: false,
+          });
+          setEditMode(false);
+          setSelectedCategory(null);
+        })
+        .catch((error) => {
+          console.error('Error updating category:', error);
+        });
+    }
   };
 
   return (
@@ -105,9 +110,9 @@ function EditCategory() {
         <div className='navbar'> 
           <NavbarUser buttons={buttons} />
         </div>
-        <div class="container">
-         <div class="row">
-         <div class="col">
+        <div className="container">
+         <div className="row">
+         <div className="col">
             <h1 className='base-datos'>Base de datos</h1>
             <h2 className='palabras-actuales'>Palabras actuales</h2>
             {categoriesArray.map((jsonData) => (
@@ -129,8 +134,81 @@ function EditCategory() {
         </div>
       ))}
       </div>
+      <div className='col'>
+         <h1>Editar Categoría</h1>
+        <br />
+
+        
+
+        <strong>Selecciona una categoría:</strong>
+        <br />
+        <select onChange={(e) => handleCategorySelect(categoriesArray[e.target.value])}>
+        <option value="">Categorías</option>
+          {categoriesArray.map((jsonData, index) => (
+            <option key={jsonData.id} value={index}>
+              {jsonData.name}
+            </option>
+          ))}
+        </select>
+            
+        {editMode && (
+          <form onSubmit={handleFormSubmit}>  
+
+            <label> 
+            <strong>Nombre:</strong><br /> 
+            <input 
+             type="text"
+             name="name"
+             value={formData.name}
+             onChange={handleInputChange}
+            />
+             </label>
+          <label>
+            <strong>Color:</strong><br /> 
+            <input
+              type="text"
+              name="color"
+              value={formData.color}
+              onChange={handleInputChange}
+            />
+            </label>
+          <label>
+            <strong>Icon:</strong><br /> 
+            <input
+              type="text"
+              name="icon"
+              value={formData.icon}
+              onChange={handleInputChange}
+            />
+            </label>
+        
+          <label>
+            <strong>ID Settings:</strong><br /> 
+            <input
+              type="number"
+              name="idsettings"
+              value={formData.idsettings}
+              onChange={handleInputChange}
+            />
+          </label>
+          <br /> 
+          <label>
+            <strong>Is Scannable:</strong><br /> 
+            <input
+              type="checkbox"
+              name="isscannable"
+              value={formData.isscannable}
+              onChange={handleInputChange}
+            />
+            </label>
+           
+            <br /><button type="submit" className="btn btn-success">Editar</button>
+          </form>
+            )}
+          </div>
+        </div>
       </div>
-      </div>
+ 
       </>
    );
 }

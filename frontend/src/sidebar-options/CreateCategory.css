@@ -23,6 +23,7 @@
     border-radius: 10px; /* Rounded corners */
     background-color: #ffffff; /* Clear blue background color */
     max-width: 300px; 
+    
   }
   
   button {
@@ -35,4 +36,8 @@
   button:hover {
     text-decoration: underline;
   }
+
+.container-edit {
+  top: -600px;
+}
   

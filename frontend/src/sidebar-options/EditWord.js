@@ -1,35 +1,133 @@
-
-import  React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 import NavbarUser from '../components/NavbarUser';
 import Sidebar from '../components/Sidebar';
-import jsonData from './getAllCategories.json';
-import words from './getAllWords.json';
+import jsonData from './getAllCategories.json'; // Assuming this JSON file is valid
+import wordsData from './getAllWords.json'; // Assuming this JSON file is valid
 import axios from 'axios';
 
-// Categories: https://vc5kqp87-3000.usw3.devtunnels.ms/api/v1/categories/getall
- 
 function EditWord() {
   const [categories, setCategories] = useState([]);
+  const [expandedCategoryId, setExpandedCategoryId] = useState(null);
 
   useEffect(() => {
     const apiUrl = 'https://vc5kqp87-3000.usw3.devtunnels.ms/api/v1/categories/getall';
-    axios.get(apiUrl)
-      .then(response => {
+    axios
+      .get(apiUrl)
+      .then((response) => {
         setCategories(response.data);
       })
-      .catch(error => {
-        console.error('Error fetching data:', error);
+      .catch((error) => {
+        console.error('Error fetching categories:', error);
       });
   }, []);
-  
+
   const buttons = [
     { label: 'Crear Categoría', link: '/create-category' },
     { label: 'Tutorial', link: '/create-category-tutorial' },
   ];
-  const [expandedCategoryId, setExpandedCategoryId] = useState(null);
 
+  const [categoryData, setCategoryData] = useState({
+    name: '',
+    image: null,
+    icon: null,
+    color: null,
+    idsettings: 1,
+    isscannable: false,
+  });
+
+  const handleChange = (e) => {
+    const { name, value, type } = e.target;
+    setCategoryData({
+      ...categoryData,
+      [name]: type === 'checkbox' ? e.target.checked : value,
+    });
+  };
+
+  const handleFileChange = (e) => {
+    const { name, files } = e.target;
+    setCategoryData({
+      ...categoryData,
+      [name]: files[0], // Store the selected file in state
+    });
+  };
+
+  function resetForm() {
+    setCategoryData({
+      ...categoryData,
+      image: null,
+      audio: null,
+      video: null,
+    });
+  }
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    const formData = new FormData();
+    formData.append('image', categoryData.image);
+    formData.append('color', categoryData.color);
+    formData.append('icon', categoryData.icon);
+    formData.append('idsettings', categoryData.idsettings);
+    formData.append('isscannable', categoryData.isscannable);
+
+    const apiUrl = 'https://vc5kqp87-3000.usw3.devtunnels.ms/api/v1/categories/add';
+
+    axios
+      .post(apiUrl, formData)
+      .then(function (response) {
+        console.log('Category added successfully:', response.data);
+      })
+      .catch(function (error) {
+        console.error('Error adding category:', error);
+      });
+  };
+
+  const wordsArray = wordsData.words;
+  const [selectedWord, setSelectedWord] = useState(null); // Add this line
+  const [formValues, setFormValues] = useState({
+    word: '',
+    categoryid: '',
+    definition: '',
+    image: '',
+    suggested1: '',
+    suggested2: '',
+    video: '',
+    idsettings: 0,
+    isscannable: false,
+    audio: '',
+  });
+  const [editMode, setEditMode] = useState(false);
+  const [words, setWords] = useState([]); // Add this line
+  const categoriesArray = jsonData.categories; // Assuming this JSON data is available
+
+  const handleWordSelect = (word) => {
+    setSelectedWord(word);
+    setFormValues({
+      word: word.word,
+      categoryid: word.categoryid,
+      definition: word.definition,
+      image: word.image,
+      suggested1: word.suggested1,
+      suggested2: word.suggested2,
+      video: word.video,
+      idsettings: word.idsettings,
+      isscannable: word.isscannable,
+      audio: word.audio,
+    });
+    setEditMode(true);
+  };
+
+  const handleInputChange = (e) => {
+    const { name, value, type, checked } = e.target;
+    setFormValues({
+      ...formValues,
+      [name]: type === 'checkbox' ? checked : value,
+    });
+  };
+
+ 
  
   const toggleExpansion = (categoryId) => {
     if (expandedCategoryId === categoryId) {
@@ -39,101 +137,120 @@ function EditWord() {
     }
   };
 
-  const categoriesArray = jsonData.categories;
-  const wordsArray = words.words;
 
-  const [categoryData, setcategoryData] = useState({
-    name: '',
-    image: null, // Use null to store the selected file
-    icon: null,
-    color: null, // Use null to store the selected file
-    idsettings: 1,
-    isscannable: false,
-  });
-
-  const handleChange = (e) => {
-    const { name, value, type } = e.target;
-    setcategoryData({
-      ...categoryData,
-      [name]: type === 'checkbox' ? e.target.checked : value,
-    });
-  };
-
-  const handleFileChange = (e) => {
-    const { name, files } = e.target;
-    setcategoryData({
-      ...categoryData,
-      [name]: files[0], // Store the selected file in state
-    });
-  };
-
-  function resetForm() {
-    setcategoryData({
-      ...categoryData,
-      image: null, // Clear selected image
-      audio: null, // Clear selected audio
-      video: null, // Clear selected video
-    });
-  }
-
-  const handleSubmit = (e) => {
+  const handleFormSubmit = (e) => {
     e.preventDefault();
-
-    // Create a FormData object to send the file data
-    const formData = new FormData();
-    formData.append('image', categoryData.image);
-    formData.append('color', categoryData.color);
-    formData.append('icon', categoryData.icon);
-      formData.append('idsettings', categoryData.idsettings);
-    formData.append('isscannable', categoryData.isscannable);
-
-    // Define the URL where you want to send the POST request
-    const apiUrl = "https://vc5kqp87-3000.usw3.devtunnels.ms/api/v1/categories/add";
-
-    // Send the POST request using Axios
-    axios.post(apiUrl, formData)
-      .then(function (response) {
-        console.log('Word added successfully:', response.data);
-      })
-      .catch(function (error) {
-        console.error('Error adding word:', error);
-      });
+    if (selectedWord) {
+      axios
+        .put(
+          `https://vc5kqp87-3000.usw3.devtunnels.ms/api/v1/words/update/${selectedWord.id}`,
+          formValues
+        )
+        .then((response) => {
+          console.log('Updated Word:', response.data);
+          const updatedWords = wordsArray.map((word) => {
+            if (word.id === response.data.id) {
+              return response.data;
+            }
+            return word;
+          });
+          setWords(updatedWords);
+          setFormValues({
+            word: '',
+            categoryid: '',
+            definition: '',
+            image: '',
+            suggested1: '',
+            suggested2: '',
+            video: '',
+            idsettings: 0,
+            isscannable: false,
+            audio: '',
+          });
+          setEditMode(false);
+          setSelectedWord(null);
+        })
+        .catch((error) => {
+          console.error('Error updating word:', error);
+        });
+    }
   };
 
   return (
     <>
-         <Sidebar />
-        <div className='navbar'> 
-          <NavbarUser buttons={buttons} />
-        </div>
-        <div class="container">
-         <div class="row">
-         <div class="col">
-            <h1 className='base-datos'>Base de datos</h1>
-            <h2 className='palabras-actuales'>Palabras actuales</h2>
+      <Sidebar />
+      <div className="navbar">
+        <NavbarUser buttons={buttons} />
+      </div>
+      <div className="container">
+        <div className="row">
+          <div className="col">
+            <h1 className="base-datos">Base de datos</h1>
+            <h2 className="palabras-actuales">Palabras actuales</h2>
             {categoriesArray.map((jsonData) => (
-          <div className='box' key={jsonData.id}>
-          <button onClick={() => toggleExpansion(jsonData.id)}>
-            {expandedCategoryId === jsonData.id ? '▼' : '▲'} {jsonData.name}
-          </button>
-          {expandedCategoryId === jsonData.id && (
-            <div>
-              {wordsArray
-                .filter((words) => words.categoryid === jsonData.id)
-                .map((matchingWordData) => (
-                  <div key={matchingWordData.id}>
-                    <li>{matchingWordData.word}</li>
+              <div className="box" key={jsonData.id}>
+                <button onClick={() => toggleExpansion(jsonData.id)}>
+                  {expandedCategoryId === jsonData.id ? '▼' : '▲'} {jsonData.name}
+                </button>
+                {expandedCategoryId === jsonData.id && (
+                  <div>
+                    {wordsArray
+                      .filter((word) => word.categoryid === jsonData.id)
+                      .map((matchingWordData) => (
+                        <div key={matchingWordData.id}>
+                          <li>{matchingWordData.word}</li>
+                        </div>
+                      ))}
                   </div>
-                ))}
-            </div>
+                )}
+              </div>
+            ))}
+          </div>
+          <strong>Selecciona una palabra:</strong>
+          <br />
+          <select onChange={(e) => handleWordSelect(wordsArray[e.target.value])}>
+            <option value="">Palabras</option>
+            {wordsArray.map((word, index) => (
+              <option key={word.id} value={index}>
+                {word.word}
+              </option>
+            ))}
+          </select>
+
+          {editMode && (
+            <form onSubmit={handleFormSubmit}>
+              <br />
+              <label>
+                <strong>Palabra:</strong>
+                <br />
+                <input
+                  type="text"
+                  name="word"
+                  value={formValues.word}
+                  onChange={handleInputChange}
+                />
+              </label>
+              <label>
+                <strong>ID Categoría:</strong>
+                <br />
+                <input
+                  type="number"
+                  name="categoryid"
+                  value={formValues.categoryid}
+                  onChange={handleInputChange}
+                />
+              </label>
+
+              <br />
+              <button type="submit" className="btn btn-success">
+                Editar
+              </button>
+            </form>
           )}
         </div>
-      ))}
       </div>
-      </div>
-      </div>
-      </>
-   );
+    </>
+  );
 }
 
 export default EditWord;
