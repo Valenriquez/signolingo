@@ -21,7 +21,7 @@ function AddAdmins() {
     <div className='d-flex vh-100 bg-white justify-content-center align-items-center'>
         <div className='w-50 bg-white rounded p-3'>
             <form onSubmit={handleSubmit}>
-                <h2>Añadir Asministrador(a)</h2>
+                <h2>Añadir Administrador(a)</h2>
                 <div className='mb-2'>
                     <label htmlFor=''>Nombre</label>
                     <input type='text' placeholder='Ingresa el nombre ' className='form-control' 

@@ -23,6 +23,9 @@ import CreateWord from './sidebar-options/CreateWord';
 import EditCategory from './sidebar-options/EditCategory';
 import EditWord from './sidebar-options/EditWord';
 
+// STATS 
+import Stats from './components/Stats';
+
 function App(){
   return (
     <React.Fragment>
@@ -39,6 +42,7 @@ function App(){
           <Route path="/update/:id" element={<UpdateUser/>} />
           <Route path="/see-admins" element={<SeeAdmins/>} />
           <Route path="/add-admins" element={<AddAdmins/>} />
+          <Route path="/stats" element={<Stats/>} />
 |
  
         </Routes>

@@ -1,28 +1,44 @@
 {
-    "categories": [
-      {
-        "id": 1,
-        "name": "Deportes",
-        "color": "red",
-        "icon": "iconDeportes.jpg"  
-      },
-      {
-        "id": 2,
-        "name": "Frutas",
-        "color": "blue",
-        "icon": "iconFrutas.jpg"
-      },
-      {
-        "id": 3,
-        "name": "addName",
-        "color": "add",
-        "icon": "iconUpdate.jpg"
-      },
-      {
-        "id": 5,
-        "name": "addingName",
-        "color": "green",
-        "icon": "iconAdded.webp"
-      }
-    ]
-  }
+  "categories": [
+    {
+      "id": 9,
+      "name": "Utiles",
+      "color": "verde",
+      "icon": "pencil",
+      "idsettings": 1,
+      "isscannable": true
+    },
+    {
+      "id": 10,
+      "name": "Basura",
+      "color": "azul",
+      "icon": "trash",
+      "idsettings": 1,
+      "isscannable": true
+    },
+    {
+      "id": 11,
+      "name": "Archivos",
+      "color": "amarillo",
+      "icon": "folder",
+      "idsettings": 1,
+      "isscannable": true
+    },
+    {
+      "id": 12,
+      "name": "Personas",
+      "color": "rojo",
+      "icon": "person",
+      "idsettings": 1,
+      "isscannable": true
+    },
+    {
+      "id": 13,
+      "name": "Deportes",
+      "color": "morado",
+      "icon": "volleyball",
+      "idsettings": 1,
+      "isscannable": true
+    }
+  ]
+}

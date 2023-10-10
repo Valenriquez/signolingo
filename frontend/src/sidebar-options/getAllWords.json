@@ -1,35 +1,82 @@
 {
-    "words": [
-      {
-        "id": 1,
-        "word": "Fútbol",
-        "categoryid": 1,
-        "definition": "Es un deporte conocido",
-        "image": "image.jpg",
-        "suggested1": "rojo",
-        "suggested2": "blanco",
-        "video": "video.com"
-      },
-      {
-        "id": 2,
-        "word": "Manzana",
-        "categoryid": 2,
-        "definition": "Es una fruta roja y muy rica",
-        "image": "image.jpg",
-        "suggested1": "rojo",
-        "suggested2": "blanco",
-        "video": "video.com"
-      },
-      {
-        "id": 3,
-        "word": "Sandía",
-        "categoryid": 2,
-        "definition": "Es una fruta roja con mucha agua",
-        "image": "image.jpg",
-        "suggested1": "rojo",
-        "suggested2": "verde",
-        "video": "sandía.com"
-      }
-      
-    ]
-  }
+  "words": [
+    {
+      "id": 12,
+      "word": "Azul",
+      "categoryid": 12,
+      "definition": "Lorem ipsum dolor sit amet, consectetur adipiscing elit",
+      "image": "blue",
+      "suggested1": "Pájaro",
+      "suggested2": "Galleta",
+      "video": "Alimentos_7_Azul",
+      "idsettings": 1,
+      "isscannable": false,
+      "audio": "Manzana"
+    },
+    {
+      "id": 14,
+      "word": "Casa",
+      "categoryid": 13,
+      "definition": "Lorem ipsum dolor sit amet, consectetur adipiscing elit",
+      "image": "ball",
+      "suggested1": "Manzana",
+      "suggested2": "Galleta",
+      "video": "Alimentos_7_Pelota",
+      "idsettings": 1,
+      "isscannable": false,
+      "audio": "Manzana"
+    },
+    {
+      "id": 9,
+      "word": "Manzana",
+      "categoryid": 9,
+      "definition": "Roja por fuera y blanco por dentro",
+      "image": "apple",
+      "suggested1": "Platano",
+      "suggested2": "Galleta",
+      "video": "Alimentos_7_Manzana",
+      "idsettings": 1,
+      "isscannable": false,
+      "audio": "Manzana"
+    },
+    {
+      "id": 11,
+      "word": "Pájaro",
+      "categoryid": 11,
+      "definition": "Lorem ipsum dolor sit amet, consectetur adipiscing elit",
+      "image": "bird",
+      "suggested1": "Azul",
+      "suggested2": "Galleta",
+      "video": "Alimentos_7_Pájaro",
+      "idsettings": 1,
+      "isscannable": false,
+      "audio": "Manzana"
+    },
+    {
+      "id": 13,
+      "word": "Pelota",
+      "categoryid": 13,
+      "definition": "Lorem ipsum dolor sit amet, consectetur adipiscing elit",
+      "image": "ball",
+      "suggested1": "Azul",
+      "suggested2": "Galleta",
+      "video": "Alimentos_7_Pelota",
+      "idsettings": 1,
+      "isscannable": false,
+      "audio": "Manzana"
+    },
+    {
+      "id": 10,
+      "word": "Platano",
+      "categoryid": 10,
+      "definition": "Lorem ipsum dolor sit amet, consectetur adipiscing elit",
+      "image": "banana",
+      "suggested1": "Manzana",
+      "suggested2": "Galleta",
+      "video": "Alimentos_7_Platano",
+      "idsettings": 1,
+      "isscannable": false,
+      "audio": "Manzana"
+    }
+  ]
+}

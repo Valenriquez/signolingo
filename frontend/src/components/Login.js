@@ -29,8 +29,7 @@ function Login() {
         <path d="M0,0 C300,120 400,320 700,320" fill="transparent" stroke="purple" stroke-width="10" />
         </svg>
 
-        <div className='container'>
-            <div className='row'>
+        <div className='container-login'>
                 <h1>Ingresa</h1>
                 <form onSubmit={handleSubmit(onSubmit)}>
                     <p className='input-label'>Email *</p>
@@ -94,7 +93,6 @@ function Login() {
                     </div>
                 </form>
             </div>
-        </div>
         </>
     );
 }

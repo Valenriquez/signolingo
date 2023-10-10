@@ -8,7 +8,7 @@ import Sidebar from './Sidebar';
 
 function User() {
   const buttons = [
-    { label: 'Comentarios ', link: '/dudas' },
+    { label: 'Estadísticas ', link: '/stats' },
     { label: 'Tutorial', link: '/dudas' },
     // Add more buttons as needed
   ];
@@ -16,11 +16,11 @@ function User() {
   return (
     <>  
         <div className='grid-container'>
-        <Sidebar />
+        <Sidebar /> 
         <div className='navbar'> 
         <NavbarUser buttons={buttons} />
         </div>
-      </div>
+      </div>  
       <div className='col-md-9'>
         <h1>Bienvenido(a) a la página de Administrador </h1>
           <p className='centered-paragraph'>
