@@ -11,7 +11,7 @@ function AddAdmins() {
 
     function handleSubmit(event) {
         event.preventDefault();
-        axios.post('http://localhost/3000/add', {name, email})
+        axios.post('https://vc5kqp87-3000.usw3.devtunnels.ms/api/v1/adminsauth/add', {name, email})
         .then(res => {
             console.log(res);
             navigate('/see-users');

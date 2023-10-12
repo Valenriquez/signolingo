@@ -18,10 +18,10 @@ img {
 }
   
 .container-login{
-  top: -700px;
+  top: -1000px;
   left: 20px;
   align-content: center;
-  margin: 10%;
+  margin: 5%;
   background: #fff;
 }
   
@@ -36,30 +36,28 @@ img {
   
 .column {
   flex: 6;
-  
 }
- 
-  
+
 .left-half {
   padding: 30px 80px 30px 60px;
 }
   
-  .input {
-    display: block;
-    width: 100%;
-    border: none;
-    border-bottom: 1px solid #ccc;
-  }
+.input {
+  display: block;
+  width: 100%;
+  border: none;
+  border-bottom: 1px solid #ccc;
+}
   
-  .input-label {
-    color: #b3b3b3;
-    font-size: 12px;
-    margin-top: 30px;
-  }
+.input-label {
+  color: #b3b3b3;
+  font-size: 12px;
+  margin-top: 30px;
+}
   
-  .error {
-    font-size: 10px;
-    color: rgb(255, 71, 71);
-  }
+.error {
+  font-size: 10px;
+  color: rgb(255, 71, 71);
+}
   
    

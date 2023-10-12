@@ -122,7 +122,7 @@ function CreateCategory() {
                 .filter((words) => words.categoryid === jsonData.id)
                 .map((matchingWordData) => (
                   <div key={matchingWordData.id}>
-                    <li>{matchingWordData.word}</li>
+                    <button>{matchingWordData.word}</button>
                   </div>
                 ))}
             </div>

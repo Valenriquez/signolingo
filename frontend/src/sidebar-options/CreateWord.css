@@ -6,9 +6,7 @@
   border-radius: 5px;
   cursor: pointer;
 }
-  
-  /* Define any additional styles as needed */
-  
+    
 label {
   padding: 15px;
 }
@@ -22,19 +20,17 @@ h1 {
 }
 
 .container {
-  justify-content: flex-end; /* Align container to the right */
-  align-items: flex-start; /* Move container to the top */
+  justify-content: flex-end;  
+  align-items: flex-start; 
   width: 900px;
   position: relative;
-  top: -830px;
-  left: 8%;
+  top: -900px;
+  left: 6%;
 }
- 
  
 .palabras-actuales{
   font-size: medium;
   padding-left: 100px;
-   
 }
 
 .base-datos {

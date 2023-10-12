@@ -10,28 +10,25 @@ function User() {
   const buttons = [
     { label: 'Estadísticas ', link: '/stats' },
     { label: 'Tutorial', link: '/dudas' },
-    // Add more buttons as needed
   ];
 
   return (
     <>  
-        <div className='grid-container'>
-        <Sidebar /> 
+        <div className='grid-container-inicio'>
+          <Sidebar /> 
         <div className='navbar'> 
-        <NavbarUser buttons={buttons} />
+          <NavbarUser buttons={buttons} />
         </div>
       </div>  
-      <div className='col-md-9'>
+      <div className='col-md-9-principal'>
         <h1>Bienvenido(a) a la página de Administrador </h1>
-          <p className='centered-paragraph'>
             Somos una comunidad enfocada a contribuir un bien en la sociedad, <br />
             debido a que ayudamos a personas sordomudas mediante nuestra <br /> 
             aplicación móvil creada con Swift UI. El propósito de la aplicación <br /> 
             es enseñar al usuario la lengua de señas. Se usará un modelo CO-ML el  <br />
             cual reconoce imágenes, así como se dará el significado de la palabra y  <br /> 
             ejercicios para hacer el método de aprendizaje más entretenido y didáctico.
-          </p>
-        </div>
+       </div>
       </>
    );
 }

@@ -1,7 +1,6 @@
 import React from 'react';
 import { IconName } from "react-icons/bs";
 
-
 import {
   CDBSidebar,
   CDBSidebarContent,

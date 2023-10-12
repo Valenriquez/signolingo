@@ -3,11 +3,28 @@
     font-size: large;
 }
 
+.col-md-9-principal {
+    padding: 50px;
+    position: relative;
+    top: -1200px;
+    left: 20%;
+}
 
-.col-md-9 {
-    top:-15px;
-    left: 150px;
-    align-content: center;
-    margin: 10%;
-    background: #fff;
-  }
+.navbar {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background-color: #ffffff;
+    padding: 10px;
+}
+
+.col-md-9-principal{
+    justify-content: flex-end;  
+    align-items: flex-start; 
+    width: 900px;
+    position: relative;
+    top: -900px;
+    left: 20%;
+}
+  

@@ -7,14 +7,14 @@ function SeeAdmins() {
     const [admins, setAdmins] = useState([])
     
     useEffect(()=> {
-        axios.get('http://localhost/3000/getall')
+        axios.get('https://vc5kqp87-3000.usw3.devtunnels.ms/api/v1/adminsauth/getall')
         .then(res => setAdmins(res.data))
         .catch(err => console.log(err));
     }, [])
 
     const handleDelete = async (id) => {
         try {
-            await axios.delete('http://localhost/3000/delete' + id)
+            await axios.delete('https://vc5kqp87-3000.usw3.devtunnels.ms/api/v1/adminsauth/delete' + id)
             window.location.reload()
         }catch(err) {
             console.log(err);

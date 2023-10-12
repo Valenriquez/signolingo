@@ -198,7 +198,7 @@ function EditWord() {
                       .filter((word) => word.categoryid === jsonData.id)
                       .map((matchingWordData) => (
                         <div key={matchingWordData.id}>
-                          <li>{matchingWordData.word}</li>
+                          <button>{matchingWordData.word}</button>
                         </div>
                       ))}
                   </div>
@@ -206,6 +206,9 @@ function EditWord() {
               </div>
             ))}
           </div>
+          <div className="col"> 
+          <h1>Editar Palabra</h1>
+        <br />
           <strong>Selecciona una palabra:</strong>
           <br />
           <select onChange={(e) => handleWordSelect(wordsArray[e.target.value])}>
@@ -216,7 +219,6 @@ function EditWord() {
               </option>
             ))}
           </select>
-
           {editMode && (
             <form onSubmit={handleFormSubmit}>
               <br />
@@ -240,13 +242,99 @@ function EditWord() {
                   onChange={handleInputChange}
                 />
               </label>
-
+              <label>
+                <strong>Definición:</strong>
+                <br />
+                <input
+                  type="text"
+                  name="definition"
+                  value={formValues.definition}
+                  onChange={handleInputChange}
+                />
+              </label>
               <br />
+              <label>
+                <strong>Imagen:</strong>
+                <br />
+                <input
+                  type="text"
+                  name="image"
+                  value={formValues.image}
+                  onChange={handleInputChange}
+                />
+              </label>
+              <br />
+              <label>
+                <strong>Primera palabra sugerida:</strong>
+                <br />
+                <input
+                  type="text"
+                  name="suggested1"
+                  value={formValues.suggested1}
+                  onChange={handleInputChange}
+                />
+              </label>
+              <br />
+              <label>
+                <strong>Segunda palabra sugerida:</strong>
+                <br />
+                <input
+                  type="text"
+                  name="suggested2"
+                  value={formValues.suggested2}
+                  onChange={handleInputChange}
+                />
+              </label>
+              <br />
+              <label>
+                <strong>Video:</strong>
+                <br />
+                <input
+                  type="text"
+                  name="video"
+                  value={formValues.video}
+                  onChange={handleInputChange}
+                />
+              </label>
+              <br />
+              <label>
+                <strong>idsettings:</strong> 
+                <br />
+                <input
+                  type="number"
+                  name="idsettings"
+                  value={formValues.idsettings}
+                  onChange={handleInputChange}
+                />
+              </label>
+              <br />
+              <label>
+                <strong>isscannable:</strong>  
+                <br />
+                <input
+                  type="text"
+                  name="isscannable"
+                  value={formValues.isscannable}
+                  onChange={handleInputChange}
+                />
+              </label>
+              <br />
+              <label>
+                <strong>Audio:</strong>  
+                <br />
+                <input
+                  type="text"
+                  name="audio"
+                  value={formValues.audio}
+                  onChange={handleInputChange}
+                />
+              </label>
               <button type="submit" className="btn btn-success">
                 Editar
               </button>
             </form>
           )}
+        </div>
         </div>
       </div>
     </>

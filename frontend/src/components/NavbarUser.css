@@ -2,8 +2,6 @@
   color: rgb(255, 255, 255);
 }
   
-  /* In your CSS file */
-
 .black-text {
   color: rgb(255, 255, 255);
 }
@@ -15,8 +13,6 @@
 .nav-item, .navbar-brand {
   font-family:'Times New Roman', Times, serif
 }
-
- 
 
 .nav-item {
 text-emphasis-color: white;
