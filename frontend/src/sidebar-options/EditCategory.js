@@ -12,6 +12,9 @@ import axios from 'axios';
 function EditCategory() {
   const [categories, setCategories] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState(null);
+  const [selectedCategoryName, setSelectedCategoryName] = useState(""); // Store selected category name
+  const [selectedCategoryId, setSelectedCategoryId] = useState(null);
+
   const [formData, setFormData] = useState({
     name: '',
     color: '',
@@ -22,7 +25,6 @@ function EditCategory() {
   const [editMode, setEditMode] = useState(false);
 
   useEffect(() => {
-    // Fetch categories from the API
     axios.get('https://vc5kqp87-3000.usw3.devtunnels.ms/api/v1/categories/getall')
       .then((response) => {
         setCategories(response.data);
@@ -32,9 +34,13 @@ function EditCategory() {
       });
   }, []);
 
+  const handleCategoryClick = (categoryName) => {
+    // Update the selected category name when a button is clicked
+    setSelectedCategoryName(categoryName);
+  };
   
   const buttons = [
-    { label: 'Crear Categoría', link: '/create-category' },
+    { label: 'Editar Categoría', link: '/create-category' },
     { label: 'Tutorial', link: '/create-category-tutorial' },
   ];
   const [expandedCategoryId, setExpandedCategoryId] = useState(null);
@@ -59,7 +65,7 @@ function EditCategory() {
       color: category.color,
       icon: category.icon,
       idsettings: category.idsettings,
-      isscannable: category.isscannable,
+      isscannable: category.isscannable
     });
     setEditMode(true);
   };
@@ -71,6 +77,37 @@ function EditCategory() {
       [name]: type === 'checkbox' ? checked : value,
     });
   };
+
+  ////aaa change
+
+  
+  useEffect(() => {
+    if (selectedCategoryId !== null) {
+      const selectedCategory = categoriesArray.find((category) => category.id === selectedCategoryId);
+      if (selectedCategory) {
+        setFormData({
+          name: selectedCategory.name,
+          color: selectedCategory.color,
+          icon: selectedCategory.icon,
+          idsettings: selectedCategory.idsettings,
+          isscannable: selectedCategory.isscannable
+        });
+        setEditMode(true);
+      }
+    } else {
+      setFormData({
+        name: '',
+        color: '',
+        icon: '',
+        idsettings: 0,
+        isscannable: false
+      });
+      setEditMode(false);
+    }
+  }, [selectedCategoryId]);
+  
+
+  ////aaa change
 
   const handleFormSubmit = (e) => {
     e.preventDefault();
@@ -87,7 +124,6 @@ function EditCategory() {
             return category;
           });
           setCategories(updatedCategories);
-          // Clear the form and exit edit mode
           setFormData({
             name: '',
             color: '',
@@ -115,10 +151,11 @@ function EditCategory() {
          <div className="col">
             <h1 className='base-datos'>Base de datos</h1>
             <h2 className='palabras-actuales'>Palabras actuales</h2>
-            {categoriesArray.map((jsonData) => (
+
+          {categoriesArray.map((jsonData) => (
           <div className='box' key={jsonData.id}>
           <button onClick={() => toggleExpansion(jsonData.id)}>
-            {expandedCategoryId === jsonData.id ? '▼' : '▲'} {jsonData.name}
+            {expandedCategoryId === jsonData.id ? '▼' : '▲'} <span onClick={() => setSelectedCategoryId(jsonData.id)} >{jsonData.name}</span>
           </button>
           {expandedCategoryId === jsonData.id && (
             <div>
@@ -136,21 +173,6 @@ function EditCategory() {
       </div>
       <div className='col'>
          <h1>Editar Categoría</h1>
-        <br />
-
-        
-
-        <strong>Selecciona una categoría:</strong>
-        <br />
-        <select onChange={(e) => handleCategorySelect(categoriesArray[e.target.value])}>
-        <option value="">Categorías</option>
-          {categoriesArray.map((jsonData, index) => (
-            <option key={jsonData.id} value={index}>
-              {jsonData.name}
-            </option>
-          ))}
-        </select>
-            
         {editMode && (
           <form onSubmit={handleFormSubmit}>  
 
@@ -201,8 +223,11 @@ function EditCategory() {
               onChange={handleInputChange}
             />
             </label>
-           
-            <br /><button type="submit" className="btn btn-success">Editar</button>
+            <br />
+            <button type="submit" className="btn btn-success">Editar</button>
+            <button className="btn btn-danger" style={{ margin: '10px' }} >
+              Borrar 
+            </button>
           </form>
             )}
           </div>

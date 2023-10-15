@@ -3,12 +3,17 @@ import axios from 'axios'
 import './SeeAdmins.css'; // Import the CSS file
 import { Link } from 'react-router-dom';
 // /update/:id
+
+//https://reqres.in/api/users?page=2
+//  <td>{data.name}</td>
+// <td>{data.email}</td>
+
 function SeeAdmins() {
     const [admins, setAdmins] = useState([])
     
     useEffect(()=> {
-        axios.get('https://vc5kqp87-3000.usw3.devtunnels.ms/api/v1/adminsauth/getall')
-        .then(res => setAdmins(res.data))
+        axios.get('https://reqres.in/api/users?page=2')
+        .then(res => setAdmins(res.data.data))
         .catch(err => console.log(err));
     }, [])
 
@@ -25,6 +30,12 @@ function SeeAdmins() {
     <div className='d-flex vh-100 bg-white justify-content-center align-items-center'>
         <div className='w-50 bg-white rounded'>
             <Link to='/add-admins' className='btn btn-success'>Añadir +</Link>
+            <Link to="/home">
+                <button className="btn btn-success" style={{ margin: '10px' }}> Inicio </button>
+            </Link>
+            <Link to="/">
+                <button className="btn btn-outline-success" style={{ margin: '10px' }}> Salir </button>
+            </Link>
             <table className='table'>
                 <thead>
                     <tr>
@@ -37,7 +48,7 @@ function SeeAdmins() {
                     {
                         admins.map((data, i)=> (
                             <tr key={i}>
-                                <td>{data.name}</td>
+                                <td>{data.first_name}</td>
                                 <td>{data.email}</td>
                                 <td>
                                     <button className='btn btn-danger ms-2' onClick={ e => handleDelete(data.id)}>Eliminar</button>

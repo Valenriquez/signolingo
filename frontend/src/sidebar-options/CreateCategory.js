@@ -59,20 +59,14 @@ function CreateCategory() {
     });
   };
 
-  const handleFileChange = (e) => {
-    const { name, files } = e.target;
-    setcategoryData({
-      ...categoryData,
-      [name]: files[0], // Store the selected file in state
-    });
-  };
+  
 
   function resetForm() {
     setcategoryData({
       ...categoryData,
-      image: null, // Clear selected image
-      audio: null, // Clear selected audio
-      video: null, // Clear selected video
+      image: null,  
+      audio: null, 
+      video: null,  
     });
   }
 

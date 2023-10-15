@@ -10,6 +10,10 @@ import axios from 'axios';
 function EditWord() {
   const [categories, setCategories] = useState([]);
   const [expandedCategoryId, setExpandedCategoryId] = useState(null);
+  const [selectWord, setSelectWord] = useState("");
+  const [selectedWord, setSelectedWord] = useState(null); // Add this line
+  const [selectedWordId, setSelectedWordId] = useState(null);
+
 
   useEffect(() => {
     const apiUrl = 'https://vc5kqp87-3000.usw3.devtunnels.ms/api/v1/categories/getall';
@@ -24,7 +28,7 @@ function EditWord() {
   }, []);
 
   const buttons = [
-    { label: 'Crear Categoría', link: '/create-category' },
+    { label: 'Editar Palabra', link: '/create-category' },
     { label: 'Tutorial', link: '/create-category-tutorial' },
   ];
 
@@ -49,7 +53,7 @@ function EditWord() {
     const { name, files } = e.target;
     setCategoryData({
       ...categoryData,
-      [name]: files[0], // Store the selected file in state
+      [name]: files[0],  
     });
   };
 
@@ -84,8 +88,17 @@ function EditWord() {
       });
   };
 
+  const [editMode, setEditMode] = useState(false);
+  const [words, setWords] = useState([]); 
+  const categoriesArray = jsonData.categories; 
+
+  const handleWordSelect = (word) => {
+    setSelectedWordId(word.id);
+    setEditMode(true);
+  };
+
+  /// DELETE
   const wordsArray = wordsData.words;
-  const [selectedWord, setSelectedWord] = useState(null); // Add this line
   const [formValues, setFormValues] = useState({
     word: '',
     categoryid: '',
@@ -98,26 +111,45 @@ function EditWord() {
     isscannable: false,
     audio: '',
   });
-  const [editMode, setEditMode] = useState(false);
-  const [words, setWords] = useState([]); // Add this line
-  const categoriesArray = jsonData.categories; // Assuming this JSON data is available
 
-  const handleWordSelect = (word) => {
-    setSelectedWord(word);
-    setFormValues({
-      word: word.word,
-      categoryid: word.categoryid,
-      definition: word.definition,
-      image: word.image,
-      suggested1: word.suggested1,
-      suggested2: word.suggested2,
-      video: word.video,
-      idsettings: word.idsettings,
-      isscannable: word.isscannable,
-      audio: word.audio,
-    });
-    setEditMode(true);
-  };
+
+  // END DELETE PROBABLY
+
+  useEffect(() => {
+    if (selectedWordId !== null) {
+      const selectedWord = wordsArray.find((word) => word.id === selectedWordId);
+      if (selectedWord) {
+        setFormValues({
+          word: selectedWord.word,
+          categoryid: selectedWord.categoryid,
+          definition: selectedWord.definition,
+          image: selectedWord.image,
+          suggested1: selectedWord.suggested1,
+          suggested2: selectedWord.suggested2,
+          video: selectedWord.video,
+          idsettings: selectedWord.idsettings,
+          isscannable: selectedWord.isscannable,
+          audio: selectedWord.audio,
+        });
+        setEditMode(true);
+      }
+    } else {
+      setFormValues({
+        word: '',
+        categoryid: '',
+        definition: '',
+        image: '',
+        suggested1: '',
+        suggested2: '',
+        video: '',
+        idsettings: 0,
+        isscannable: false,
+        audio: '',
+      });
+      setEditMode(false);
+    }
+  }, [selectedWordId]);
+  
 
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -126,8 +158,6 @@ function EditWord() {
       [name]: type === 'checkbox' ? checked : value,
     });
   };
-
- 
  
   const toggleExpansion = (categoryId) => {
     if (expandedCategoryId === categoryId) {
@@ -136,7 +166,6 @@ function EditWord() {
       setExpandedCategoryId(categoryId);
     }
   };
-
 
   const handleFormSubmit = (e) => {
     e.preventDefault();
@@ -197,9 +226,9 @@ function EditWord() {
                     {wordsArray
                       .filter((word) => word.categoryid === jsonData.id)
                       .map((matchingWordData) => (
-                        <div key={matchingWordData.id}>
-                          <button>{matchingWordData.word}</button>
-                        </div>
+                        <button onClick={() => setSelectedWordId(matchingWordData.id)}>
+                          {matchingWordData.word}
+                        </button>
                       ))}
                   </div>
                 )}
@@ -208,17 +237,6 @@ function EditWord() {
           </div>
           <div className="col"> 
           <h1>Editar Palabra</h1>
-        <br />
-          <strong>Selecciona una palabra:</strong>
-          <br />
-          <select onChange={(e) => handleWordSelect(wordsArray[e.target.value])}>
-            <option value="">Palabras</option>
-            {wordsArray.map((word, index) => (
-              <option key={word.id} value={index}>
-                {word.word}
-              </option>
-            ))}
-          </select>
           {editMode && (
             <form onSubmit={handleFormSubmit}>
               <br />
@@ -312,7 +330,7 @@ function EditWord() {
                 <strong>isscannable:</strong>  
                 <br />
                 <input
-                  type="text"
+                  type="checkbox"
                   name="isscannable"
                   value={formValues.isscannable}
                   onChange={handleInputChange}
@@ -329,8 +347,12 @@ function EditWord() {
                   onChange={handleInputChange}
                 />
               </label>
+              <br />
               <button type="submit" className="btn btn-success">
                 Editar
+              </button>
+              <button className="btn btn-danger" style={{ margin: '10px' }} >
+                Borrar 
               </button>
             </form>
           )}

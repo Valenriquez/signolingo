@@ -27,4 +27,11 @@
     top: -900px;
     left: 20%;
 }
-  
+
+.image {
+    width: 600px; /* Set the desired width */
+    height: auto; /* Automatically adjust the height to maintain the aspect ratio */
+    left: 1000px;
+    top: -1200px;
+    position: relative;
+  }

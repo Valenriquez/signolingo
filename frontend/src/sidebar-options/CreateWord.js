@@ -23,7 +23,7 @@ function CreateWord() {
   }, []);
   
   const buttons = [
-    { label: 'Crear Categoría', link: '/create-category' },
+    { label: 'Crear Palabra', link: '/create-category' },
     { label: 'Tutorial', link: '/create-category-tutorial' },
   ];
   const [expandedCategoryId, setExpandedCategoryId] = useState(null);

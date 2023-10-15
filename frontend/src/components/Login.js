@@ -1,57 +1,64 @@
-import React, { useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 import './Login.css'; // Import the CSS file
 import { useForm } from 'react-hook-form';
 import { Link } from 'react-router-dom';
+//import GetAllAdmins from './GetAllAdmins.json';;
+// import GetAllAdmins from '../GetAllAdmins.json';
+import GetAllAdmins from '../GetAllAdmins.json';
+import axios from "axios";
+
+//"email": "eve.holt@reqres.in",
+// "password": "cityslicka"
+
 
 function Login() {
-    const {
-        register,
-        handleSubmit,
-        formState: { errors },
-    } = useForm();
+ 
+    // admins
+    //const [admins, setAdmins] = useState(Object.values(GetAllAdmins.admins)); // Convert the JSON object to an array
+    // Convert the JSON array to an array
+    
+    // Email
+    const [email, setEmail] = useState('')
+    const [password, setPassword] = useState('')
+    const [isLoggedIn, setIsLoggedIn] = useState(false); // Add a state variable for login status
 
-    const [isPasswordCorrect, setIsPasswordCorrect] = useState(false);
 
-    const onSubmit = (data) => {
-        if (data.password === 'soyAdmin' || data.password === 'soySuperAdmin') {
-            setIsPasswordCorrect(true);
-        } else {
-            setIsPasswordCorrect(false);
-        }
-    };
+        console.log({ email, password })
+    const handleEmail = (e) => {
+        setEmail(e.target.value)
+    }
 
-    const ButtonSection = ({ isPasswordCorrect }) => {
-        if (isPasswordCorrect) {
-            return (
-                <div className="buttons">
-                    <Link to="/home">
-                        <button className="btn btn-outline-success" style={{ margin: '10px' }}>
-                            Inicio
-                        </button>
-                    </Link>
-                    <Link to="/see-users">
-                        <button className="btn btn-outline-success" style={{ margin: '10px' }}>
-                            Ver Usuarios
-                        </button>
-                    </Link>
-                    <Link to="/see-admins">
-                        <button className="btn btn-outline-success" style={{ margin: '10px' }}>
-                            Ver Administradores
-                        </button>
-                    </Link>
-                </div>
-            );
-        } else {
-            return (
-                <button className="btn btn-outline-success" type="submit">
-                    Ingresa
-                </button>
-            );
-        }
-    };
+    const handlePassword = (e) => {
+        setPassword(e.target.value)
+    }
+    // Super User
+    const [isSuperUser, setIsSuperUser] = useState(false);
+    const superUserJson =  GetAllAdmins.admins.map(admin => admin.issuperuser);
 
+
+    //      console.log(isUserCorrect);
+    //      const isUserCorrect = emailJson.includes(data.email) && passwordJson.includes(data.password);
+    //      const user =  GetAllAdmins.admins.find(admin => admin.email === data.email && admin.password === data.password);
+    // console.log(superUserJson); // Log the entire array to verify its contents
+
+    const handleApi = () => {
+        console.log({ email, password })
+        axios.post('https://reqres.in/api/login', {
+          email: email,
+          password: password
+        }).then(result => {
+          console.log(result.data)
+          alert('success')
+          setIsLoggedIn(true);
+        })
+          .catch(error => {
+            alert('service error')
+            console.log(error)
+          })
+
+      }
     return (
         <>
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320">
@@ -62,43 +69,53 @@ function Login() {
 
             <div className="container-login">
                 <h1>Ingresa</h1>
-                <form onSubmit={handleSubmit(onSubmit)}>
-                    <p className="input-label">Email *</p>
+                    <label htmlFor='email'>Correo: </label>
                     <input
+                        value = {email} 
+                        onChange={handleEmail}
                         className="input"
                         type="text"
                         placeholder="Email"
-                        {...register('email', {
-                            required: true,
-                            pattern: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-                        })}
                     />
-                    {errors.email &&
-                        <span className="error">
-                            {errors.email.type === 'required' && 'This field is required'}
-                            {errors.email.type === 'pattern' && 'Invalid Email address'}
-                        </span>
-                    }
-                    <p className="input-label">Contraseña *</p>
+                   
+                    <label htmlFor='password'>Contraseña: </label>
                     <input
+                        value = {password} 
+                        onChange={handlePassword}
                         className="input"
-                        type="password"
+                        type="text"
                         placeholder="Contraseña"
-                        {...register('password', {
-                            required: true,
-                        })}
                     />
-                    {errors.password && (
-                        <span className="error">
-                            {errors.password.type === 'required' && 'This field is required'}
-                        </span>
-                    )}
+                   
                     <div>
                         <br />
-                        <ButtonSection isPasswordCorrect={isPasswordCorrect} />
+                        <button className="btn btn-outline-success" onClick={handleApi} >Login</button>
+                        
                     </div>
-                </form>
-            </div>
+             
+            <br/>
+            {isLoggedIn && (
+                 <div className="buttons">
+                 <Link to="/home">
+                     <button className="btn btn-outline-success">
+                         Inicio
+                     </button>
+                 </Link>
+                 <Link to="/see-admins">
+                     <button className="btn btn-outline-success" style={{ margin: '10px' }}>
+                         Ver Administradores
+                     </button>
+                 </Link>
+                 {isSuperUser && (
+                     <Link to="/superuser-action">
+                         <button className="btn btn-outline-success" style={{ margin: '10px' }}>
+                             Superuser Action
+                         </button>
+                     </Link>
+                 )}
+             </div>
+      )}
+      </div>
         </>
     );
 }
