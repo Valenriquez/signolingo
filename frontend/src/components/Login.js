@@ -9,6 +9,8 @@ import { Link } from 'react-router-dom';
 import GetAllAdmins from '../GetAllAdmins.json';
 import axios from "axios";
 
+
+ import { useAuth } from './AuthContext';
 //"email": "eve.holt@reqres.in",
 // "password": "cityslicka"
 
@@ -22,10 +24,11 @@ function Login() {
     // Email
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
-    const [isLoggedIn, setIsLoggedIn] = useState(false); // Add a state variable for login status
+    //const [isLoggedIn, setIsLoggedIn] = useState(false); // Add a state variable for login status
+    const [isButtons, setIsButtons] = useState(false); // Add a state variable for login status
 
-
-        console.log({ email, password })
+     
+    console.log({ email, password })
     const handleEmail = (e) => {
         setEmail(e.target.value)
     }
@@ -43,22 +46,28 @@ function Login() {
     //      const user =  GetAllAdmins.admins.find(admin => admin.email === data.email && admin.password === data.password);
     // console.log(superUserJson); // Log the entire array to verify its contents
 
-    const handleApi = () => {
-        console.log({ email, password })
-        axios.post('https://reqres.in/api/login', {
-          email: email,
-          password: password
-        }).then(result => {
-          console.log(result.data)
-          alert('success')
-          setIsLoggedIn(true);
-        })
-          .catch(error => {
-            alert('service error')
-            console.log(error)
-          })
+    const { login, logout } = useAuth();
 
-      }
+  const handleApi = () => {
+    console.log({ email, password });
+    axios
+      .post('https://reqres.in/api/login', {
+        email: email,
+        password: password,
+      })
+      .then((result) => {
+        console.log(result.data);
+        setIsButtons(true);
+        login(); // Call the login function from the context to set isLoggedIn to true
+      })
+      .catch((error) => {
+        alert('service error');
+        setIsButtons(false);
+        logout(); // Call the logout function from the context to set isLoggedIn to false
+        console.log(error);
+      });
+  }
+
     return (
         <>
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320">
@@ -83,33 +92,33 @@ function Login() {
                         value = {password} 
                         onChange={handlePassword}
                         className="input"
-                        type="text"
+                        type="password"
                         placeholder="Contraseña"
                     />
                    
                     <div>
                         <br />
-                        <button className="btn btn-outline-success" onClick={handleApi} >Login</button>
+                        <button className="btn btn-outline-success" onClick={handleApi} >Ingresa</button>
                         
                     </div>
              
             <br/>
-            {isLoggedIn && (
+            {isButtons && (
                  <div className="buttons">
                  <Link to="/home">
                      <button className="btn btn-outline-success">
-                         Inicio
+                        Inicio
                      </button>
                  </Link>
                  <Link to="/see-admins">
                      <button className="btn btn-outline-success" style={{ margin: '10px' }}>
-                         Ver Administradores
+                        Ver Administradores
                      </button>
                  </Link>
                  {isSuperUser && (
                      <Link to="/superuser-action">
                          <button className="btn btn-outline-success" style={{ margin: '10px' }}>
-                             Superuser Action
+                            Superuser Action
                          </button>
                      </Link>
                  )}

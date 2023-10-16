@@ -3,15 +3,20 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 import NavbarUser from '../components/NavbarUser';
 import Sidebar from '../components/Sidebar';
-import './CreateCategory.css'; // Import the CSS file
-import jsonData from './getAllCategories.json';
-import words from './getAllWords.json';
+import './CreateCategory.css'; 
+import jsonData from './getAllCategories.json'; // CATEGORIAS
+import words from './getAllWords.json'; // PALABRAS
 import axios from 'axios';
 
 // Categories: https://vc5kqp87-3000.usw3.devtunnels.ms/api/v1/categories/getall
  
 function CreateCategory() {
   const [categories, setCategories] = useState([]);
+  const [words, setWords] = useState([]);
+
+
+  const [expandedCategoryId, setExpandedCategoryId] = useState(null);
+
 
   useEffect(() => {
     const apiUrl = 'https://vc5kqp87-3000.usw3.devtunnels.ms/api/v1/categories/getall';
@@ -23,14 +28,53 @@ function CreateCategory() {
         console.error('Error fetching data:', error);
       });
   }, []);
+
+
+  useEffect(() => {
+    const apiUrl = 'https://vc5kqp87-3000.usw3.devtunnels.ms/api/v1/words/getall';
+    axios.get(apiUrl)
+      .then(response => {
+        setWords(response.data);
+      })
+      .catch(error => {
+        console.error('Error fetching data:', error);
+      });
+  }, []);
+
+  axios.get('https://vc5kqp87-3000.usw3.devtunnels.ms/api/v1/categories/getall')
+  .then(function (response) {
+     if (response.data && response.data.categories) {
+       const categoryNames = response.data.categories.map(category => category.name);
+
+       console.log('Category names:', categoryNames);
+    } else {
+      console.log('No categories found in the response.');
+    }
+  })
+  .catch(function (error) {
+    console.error('Error fetching data:', error);
+  });
+
+  axios.get('https://vc5kqp87-3000.usw3.devtunnels.ms/api/v1/words/getall')
+  .then(function (response) {
+     if (response.data && response.data.categories) {
+       const wordsNames = response.data.words.map(words => words.word);
+
+       console.log('Word names:', wordsNames);
+    } else {
+      console.log('No words found in the response.');
+    }
+  })
+  .catch(function (error) {
+    console.error('Error fetching data:', error);
+  });
+
   
   const buttons = [
     { label: 'Crear Categoría', link: '/create-category' },
     { label: 'Tutorial', link: '/create-category-tutorial' },
   ];
-  const [expandedCategoryId, setExpandedCategoryId] = useState(null);
 
- 
   const toggleExpansion = (categoryId) => {
     if (expandedCategoryId === categoryId) {
       setExpandedCategoryId(null);
@@ -39,17 +83,30 @@ function CreateCategory() {
     }
   };
 
-  const categoriesArray = jsonData.categories;
-  const wordsArray = words.words;
+  const categoriesArray = jsonData.categories;  //REEMPLAZAR
+  const wordsArray = words.words;   //REEMPLAZAR
 
   const [categoryData, setcategoryData] = useState({
     name: '',
-    image: null, // Use null to store the selected file
+    image: null,  
     icon: null,
-    color: null, // Use null to store the selected file
+    color: null, 
     idsettings: 1,
     isscannable: false,
   });
+
+  function resetForm() {
+    console.log('resetForm function is triggered');  
+    setcategoryData({
+      ...categoryData,
+      name: '',
+      image: null,  
+      icon: null,
+      color: null, 
+      idsettings: 1,
+      isscannable: false, 
+    });
+  }
 
   const handleChange = (e) => {
     const { name, value, type } = e.target;
@@ -59,26 +116,13 @@ function CreateCategory() {
     });
   };
 
-  
-
-  function resetForm() {
-    setcategoryData({
-      ...categoryData,
-      image: null,  
-      audio: null, 
-      video: null,  
-    });
-  }
-
   const handleSubmit = (e) => {
     e.preventDefault();
-
-    // Create a FormData object to send the file data
     const formData = new FormData();
     formData.append('image', categoryData.image);
     formData.append('color', categoryData.color);
     formData.append('icon', categoryData.icon);
-      formData.append('idsettings', categoryData.idsettings);
+    formData.append('idsettings', categoryData.idsettings);
     formData.append('isscannable', categoryData.isscannable);
 
     // Define the URL where you want to send the POST request
@@ -87,9 +131,11 @@ function CreateCategory() {
     // Send the POST request using Axios
     axios.post(apiUrl, formData)
       .then(function (response) {
+        alert('sucess');
         console.log('Word added successfully:', response.data);
       })
       .catch(function (error) {
+        alert('service error');
         console.error('Error adding word:', error);
       });
   };
@@ -183,7 +229,7 @@ function CreateCategory() {
           <br /><br />
           <button type="submit" className="custom-button">Añadir</button>
           <button type="button" onClick={resetForm}>Limpiar</button>
-        </form>
+         </form>
       </div>
       </div>
       </div>

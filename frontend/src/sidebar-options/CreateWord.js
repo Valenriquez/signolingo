@@ -10,6 +10,10 @@ import words from './getAllWords.json';
 
 function CreateWord() {
   const [categories, setCategories] = useState([]);
+  const [words, setWords] = useState([]);
+  
+  
+  const [expandedCategoryId, setExpandedCategoryId] = useState(null);
 
   useEffect(() => {
     const apiUrl = 'https://vc5kqp87-3000.usw3.devtunnels.ms/api/v1/categories/getall';
@@ -26,7 +30,6 @@ function CreateWord() {
     { label: 'Crear Palabra', link: '/create-category' },
     { label: 'Tutorial', link: '/create-category-tutorial' },
   ];
-  const [expandedCategoryId, setExpandedCategoryId] = useState(null);
 
  
   const toggleExpansion = (categoryId) => {
@@ -41,7 +44,7 @@ function CreateWord() {
   const wordsArray = words.words;
 
   const [wordData, setWordData] = useState({
-    id: 10,
+    id: 0,
     word: '',
     categoryid: 0,
     definition: '',
@@ -53,6 +56,23 @@ function CreateWord() {
     isscannable: false,
     audio: null, // Use null to store the selected file
   });
+
+  function resetForm() {
+    setWordData({
+    ...wordData,
+    id: 0,
+    word: '',
+    categoryid: 0,
+    definition: '',
+    image: null, // Use null to store the selected file
+    suggested1: '',
+    suggested2: '',
+    video: null, // Use null to store the selected file
+    idsettings: 1,
+    isscannable: false,
+    audio: null, // Use null to store the selected file
+    });
+  }
 
   const handleChange = (e) => {
     const { name, value, type } = e.target;
@@ -70,14 +90,7 @@ function CreateWord() {
     });
   };
 
-  function resetForm() {
-    setWordData({
-      ...wordData,
-      image: null, // Clear selected image
-      audio: null, // Clear selected audio
-      video: null, // Clear selected video
-    });
-  }
+ 
 
   const handleSubmit = (e) => {
     e.preventDefault();

@@ -1,11 +1,16 @@
 import React from 'react';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
 import './App.css';
 import Login from './components/Login';
 import Sidebar from './components/Sidebar';
 import {BrowserRouter} from 'react-router-dom';
 import {Menu, MenuItem, useProSidebar } from "react-pro-sidebar";
 import User from './components/User';
+
+// AUTH
+import { AuthProvider } from './components/AuthContext';
+import { useAuth } from './components/AuthContext';
+
 
 // USUARIOS
 import SeeUsers from './users/SeeUsers';
@@ -26,12 +31,26 @@ import EditWord from './sidebar-options/EditWord';
 import Stats from './components/Stats';
 
 function App(){
+  function ProtectedRoute({ element }) {
+    const { isLoggedIn } = useAuth(); // Use your authentication context to check if the user is logged in
+    console.log('isLoggedIn:', isLoggedIn); // Log the authentication status
+
+    if (isLoggedIn) {
+      return element; // Render the element (e.g., the home page) for authenticated users
+    } else {
+      return <Navigate to="/" />; // Redirect to the login page for unauthenticated users
+    }
+  }
   return (
+    <AuthProvider> {/* Wrap the entire application with AuthProvider */}
+
     <React.Fragment>
       <BrowserRouter>
           <Routes>
           <Route path="/" element={<Login />} />
-          <Route path="/home" element={<User/>} />
+          <Route path="/home" element={<ProtectedRoute element={<User />} />} />
+
+          <Route path="/home" element={<User />} />
           <Route path="/create-category" element={<CreateCategory/>} />
           <Route path="/create-word" element={<CreateWord/>} />
           <Route path="/edit-category" element={<EditCategory/>} />
@@ -42,11 +61,11 @@ function App(){
           <Route path="/see-admins" element={<SeeAdmins/>} />
           <Route path="/add-admins" element={<AddAdmins/>} />
           <Route path="/stats" element={<Stats/>} />
-|
- 
         </Routes>
       </BrowserRouter>
     </React.Fragment>
+    </AuthProvider>
+
   );
 }
 
