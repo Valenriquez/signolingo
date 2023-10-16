@@ -11,11 +11,17 @@ import { Link } from 'react-router-dom';
 function SeeAdmins() {
     const [admins, setAdmins] = useState([])
     
-    useEffect(()=> {
-        axios.get('https://reqres.in/api/users?page=2')
-        .then(res => setAdmins(res.data.data))
-        .catch(err => console.log(err));
-    }, [])
+    useEffect(() => {
+        axios.get('https://vc5kqp87-3000.usw3.devtunnels.ms/api/v1/admins/getall')
+          .then(res => {
+            console.log('API Response:', res.data); // Log the API response data
+            setAdmins(res.data.admins); // Update the admins state with the fetched data
+          })
+          .catch(err => console.log('API Error:', err)); // Log any API errors
+      }, []); // Empty dependency array to run the effect only once
+    
+      console.log('Admins Array:', admins); // Log the state of the admins array
+    
 
     const handleDelete = async (id) => {
         try {
@@ -45,10 +51,10 @@ function SeeAdmins() {
                     </tr>
                 </thead>
                 <tbody>
-                    {
+                {
                         admins.map((data, i)=> (
                             <tr key={i}>
-                                <td>{data.first_name}</td>
+                                <td>{data.username}</td>
                                 <td>{data.email}</td>
                                 <td>
                                     <button className='btn btn-danger ms-2' onClick={ e => handleDelete(data.id)}>Eliminar</button>

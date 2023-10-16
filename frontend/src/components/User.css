@@ -24,14 +24,14 @@
     align-items: flex-start; 
     width: 900px;
     position: relative;
-    top: -900px;
+    top: -1700px;
     left: 20%;
 }
 
 .image {
     width: 600px; /* Set the desired width */
     height: auto; /* Automatically adjust the height to maintain the aspect ratio */
-    left: 1000px;
-    top: -1200px;
+    left: 1200px;
+    top: -2100px;
     position: relative;
   }

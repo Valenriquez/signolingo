@@ -35,7 +35,7 @@ function App(){
     const { isLoggedIn } = useAuth(); // Use your authentication context to check if the user is logged in
     console.log('isLoggedIn:', isLoggedIn); // Log the authentication status
 
-    if (isLoggedIn) {
+    if (isLoggedIn || isLoggedIn === false) {  /// MODIFICARRRR SI EL LOGIN SIRVE
       return element; // Render the element (e.g., the home page) for authenticated users
     } else {
       return <Navigate to="/" />; // Redirect to the login page for unauthenticated users

@@ -4,13 +4,13 @@ import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 import NavbarUser from '../components/NavbarUser';
 import Sidebar from '../components/Sidebar';
 import './CreateCategory.css'; 
-import jsonData from './getAllCategories.json'; // CATEGORIAS
-import words from './getAllWords.json'; // PALABRAS
 import axios from 'axios';
 
 // Categories: https://vc5kqp87-3000.usw3.devtunnels.ms/api/v1/categories/getall
- 
+
+
 function CreateCategory() {
+ 
   const [categories, setCategories] = useState([]);
   const [words, setWords] = useState([]);
 
@@ -18,6 +18,27 @@ function CreateCategory() {
   const [expandedCategoryId, setExpandedCategoryId] = useState(null);
 
 
+  useEffect(() => {
+    axios.get('https://vc5kqp87-3000.usw3.devtunnels.ms/api/v1/categories/getall')
+      .then(res => {
+        console.log('API Response category:', res.data); // Log the API response data
+        setCategories(res.data.categories); // Update the admins state with the fetched data
+      })
+      .catch(err => console.log('API Error:', err)); // Log any API errors
+  }, []); // Empty dependency array to run the effect only once
+
+  console.log('categories Array:', categories); // Log the state of the admins array
+
+  useEffect(() => {
+    axios.get('https://vc5kqp87-3000.usw3.devtunnels.ms/api/v1/words/getall')
+      .then(res => {
+        console.log('API Response words:', res.data); // Log the API response data
+        setWords(res.data.words); // Update the admins state with the fetched data
+      })
+      .catch(err => console.log('API Error:', err)); // Log any API errors
+  }, []); // Empty dependency array to run the effect only once
+
+  console.log('words Array:', words); // Log the state of the admins array
 
   
   const buttons = [
@@ -33,15 +54,11 @@ function CreateCategory() {
     }
   };
 
-  const categoriesArray = jsonData.categories;  //REEMPLAZAR
-  const wordsArray = words.words;   //REEMPLAZAR
-
   const [categoryData, setcategoryData] = useState({
     name: '',
-    image: null,  
-    icon: null,
-    color: null, 
-    idsettings: 1,
+    color: '',
+    icon: '',
+    idsettings:0,
     isscannable: false,
   });
 
@@ -50,43 +67,30 @@ function CreateCategory() {
     setcategoryData({
       ...categoryData,
       name: '',
-      image: null,  
-      icon: null,
-      color: null, 
-      idsettings: 1,
+      color: '',
+      icon: '',
+      idsettings:'', 
       isscannable: false, 
     });
   }
 
-  const handleChange = (e) => {
-    const { name, value, type } = e.target;
-    setcategoryData({
-      ...categoryData,
-      [name]: type === 'checkbox' ? e.target.checked : value,
-    });
-    console.log(categoryData); // This logs the entire categoryData object to the console
-  };
-
-
   const handleSubmit = (e) => {
     e.preventDefault();
     const formData = new FormData();
-    formData.append('image', categoryData.image);
+    formData.append('name', categoryData.name)
     formData.append('color', categoryData.color);
     formData.append('icon', categoryData.icon);
     formData.append('idsettings', categoryData.idsettings);
     formData.append('isscannable', categoryData.isscannable);
-    console.log(categoryData); // This logs the entire categoryData object to the console
+    console.log(categoryData);  
 
-
-    // Define the URL where you want to send the POST request
+    
     const apiUrl = "https://vc5kqp87-3000.usw3.devtunnels.ms/api/v1/categories/add";
 
-    // Send the POST request using Axios
     axios.post(apiUrl, formData)
       .then(function (response) {
         alert('sucess');
-        console.log('Word added successfully:', response.data);
+        console.log('category added successfully:', response.data);
       })
       .catch(function (error) {
         alert('service error');
@@ -94,27 +98,47 @@ function CreateCategory() {
       });
   };
 
+  const handleChange = (e) => {
+    const { name, value, type, checked } = e.target;
+    let newValue;
+  
+    if (type === 'checkbox') {
+      newValue = checked;
+    } else if (name === 'idsettings') {
+      // Ensure that idsettings is a valid integer
+      console.log('idsettings must be a valid integer');
+      newValue = parseInt(value); // Convert the value to an integer
+    } else {
+      newValue = value;
+    }
+  
+    setcategoryData({
+      ...categoryData,
+      [name]: newValue,
+    });
+  };
+
   return (
     <>
-         <Sidebar />
+        <Sidebar />
         <div className='navbar'> 
-          <NavbarUser buttons={buttons} />
+        <NavbarUser buttons={buttons} />
         </div>
-        <div class="container">
-         <div class="row">
-         <div class="col">
+        <div className="container">
+         <div className="row">
+          <div className="col">
             <h1 className='base-datos'>Base de datos</h1>
             <h2 className='palabras-actuales'>Palabras actuales</h2>
-            {categoriesArray.map((jsonData) => (
-          <div className='box' key={jsonData.id}>
-          <button onClick={() => toggleExpansion(jsonData.id)}>
-            {expandedCategoryId === jsonData.id ? '▼' : '▲'} {jsonData.name}
-          </button>
-          {expandedCategoryId === jsonData.id && (
-            <div>
-              {wordsArray
-                .filter((words) => words.categoryid === jsonData.id)
-                .map((matchingWordData) => (
+              {categories.map((categories) => (
+              <div className='box' key={categories.id}>
+              < button onClick={() => toggleExpansion(categories.id)}>
+                {expandedCategoryId === categories.id ? '▼' : '▲'} {categories.name}
+              </button>
+              {expandedCategoryId === categories.id && (
+              <div>
+              {words
+                .filter(word => word.categoryid === categories.id)
+                .map(matchingWordData => (
                   <div key={matchingWordData.id}>
                     <button>{matchingWordData.word}</button>
                   </div>
@@ -135,6 +159,7 @@ function CreateCategory() {
               name="name"
               value={categoryData.name}
               onChange={handleChange}
+              autoComplete="off"
             />
           </label>
           <br />
@@ -142,10 +167,11 @@ function CreateCategory() {
           <strong>Añade el color:</strong>
             <br />
             <input
-              type="color"
+              type="text"
               name="color"
               value={categoryData.color}
               onChange={handleChange}
+              autoComplete="off"
             />
           </label>
           <br />
@@ -153,20 +179,22 @@ function CreateCategory() {
           <strong>Añade el icono:</strong>
             <br />  <br />
             <input
-              type="file"
+              type="text"
               name="icon"
               value={categoryData.icon}
               onChange={handleChange}
+              autoComplete="off"
             />
           </label>
           <label>
-          <strong>Añade los idsettings:</strong>
-            <br />
+          <strong>Añade el idsettings:</strong>
+            <br />  <br />
             <input
               type="number"
               name="idsettings"
               value={categoryData.idsettings}
               onChange={handleChange}
+              autoComplete="off"
             />
           </label>
           <br />
@@ -178,7 +206,7 @@ function CreateCategory() {
               name="isscannable"
               checked={categoryData.isscannable}
               onChange={handleChange}
-            />
+             />
           </label>
           <br /><br />
           <button type="submit" className="custom-button">Añadir</button>
@@ -192,3 +220,8 @@ function CreateCategory() {
 }
 
 export default CreateCategory;
+
+
+
+
+

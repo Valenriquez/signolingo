@@ -11,9 +11,28 @@ import axios from 'axios';
  
 function EditCategory() {
   const [categories, setCategories] = useState([]);
+  const [words, setWords] = useState([]);
+
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [selectedCategoryName, setSelectedCategoryName] = useState(""); // Store selected category name
   const [selectedCategoryId, setSelectedCategoryId] = useState(null);
+
+  useEffect(() => {
+    axios.get('https://vc5kqp87-3000.usw3.devtunnels.ms/api/v1/categories/getall')
+      .then(res => {
+        console.log('API Response category:', res.data);
+        setCategories(res.data.categories);
+        // Fetch words data once categories data is available
+        axios.get('https://vc5kqp87-3000.usw3.devtunnels.ms/api/v1/words/getall')
+          .then(res => {
+            console.log('API Response words:', res.data);
+            setWords(res.data.words);
+          })
+          .catch(err => console.log('API Error:', err));
+      })
+      .catch(err => console.log('API Error:', err));
+  }, []);
+  
 
   const [formData, setFormData] = useState({
     name: '',
@@ -24,18 +43,7 @@ function EditCategory() {
   });
   const [editMode, setEditMode] = useState(false);
 
-  useEffect(() => {
-    axios.get('https://vc5kqp87-3000.usw3.devtunnels.ms/api/v1/categories/getall')
-      .then((response) => {
-        setCategories(response.data);
-      })
-      .catch((error) => {
-        console.error('Error fetching categories:', error);
-      });
-  }, []);
-
   const handleCategoryClick = (categoryName) => {
-    // Update the selected category name when a button is clicked
     setSelectedCategoryName(categoryName);
   };
   
@@ -54,8 +62,8 @@ function EditCategory() {
     }
   };
 
-  const categoriesArray = jsonData.categories;
-  const wordsArray = words.words;
+  //const categoriesArray = jsonData.categories;
+  //const wordsArray = words.words;
 
 
   const handleCategorySelect = (category) => {
@@ -77,13 +85,10 @@ function EditCategory() {
       [name]: type === 'checkbox' ? checked : value,
     });
   };
-
-  ////aaa change
-
   
   useEffect(() => {
     if (selectedCategoryId !== null) {
-      const selectedCategory = categoriesArray.find((category) => category.id === selectedCategoryId);
+      const selectedCategory = categories.find((category) => categories.id === selectedCategoryId);
       if (selectedCategory) {
         setFormData({
           name: selectedCategory.name,
@@ -112,12 +117,10 @@ function EditCategory() {
   const handleFormSubmit = (e) => {
     e.preventDefault();
     if (selectedCategory) {
-      // Send a PUT request to update the selected category
-      axios.put(`https://vc5kqp87-3000.usw3.devtunnels.ms/api/v1/categories/update/${selectedCategory.id}`, formData)
+       axios.put(`https://vc5kqp87-3000.usw3.devtunnels.ms/api/v1/categories/update/${selectedCategory.id}`, formData)
         .then((response) => {
           console.log('Updated Category:', response.data);
-          // Update the local categories list with the updated category data
-          const updatedCategories = categories.map((category) => {
+           const updatedCategories = categories.map((category) => {
             if (category.id === response.data.id) {
               return response.data;
             }
@@ -127,7 +130,7 @@ function EditCategory() {
           setFormData({
             name: '',
             color: '',
-            icon: '',
+            icon: '', 
             idsettings: 0,
             isscannable: false,
           });
@@ -152,24 +155,28 @@ function EditCategory() {
             <h1 className='base-datos'>Base de datos</h1>
             <h2 className='palabras-actuales'>Palabras actuales</h2>
 
-          {categoriesArray.map((jsonData) => (
-          <div className='box' key={jsonData.id}>
-          <button onClick={() => toggleExpansion(jsonData.id)}>
-            {expandedCategoryId === jsonData.id ? '▼' : '▲'} <span onClick={() => setSelectedCategoryId(jsonData.id)} >{jsonData.name}</span>
+          {categories.map((category) => (
+          <div className='box' key={category.id}>
+          <button onClick={() => toggleExpansion(category.id)}>
+            {expandedCategoryId === category.id ? '▼' : '▲'} <span onClick={() => handleCategorySelect(category.name)}> {category.name}</span>
+
           </button>
-          {expandedCategoryId === jsonData.id && (
-            <div>
-              {wordsArray
-                .filter((words) => words.categoryid === jsonData.id)
-                .map((matchingWordData) => (
-                  <div key={matchingWordData.id}>
-                    <li>{matchingWordData.word}</li>
-                  </div>
-                ))}
+          {expandedCategoryId === category.id && (
+          <div>
+          {words
+          .filter(word => word.categoryid === category.id)
+          .map(matchingWordData => (
+            <div key={matchingWordData.id}>
+              <button>{matchingWordData.word}</button>
             </div>
+          ))}
+          </div>
           )}
         </div>
       ))}
+
+      
+
       </div>
       <div className='col'>
          <h1>Editar Categoría</h1>

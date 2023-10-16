@@ -24,7 +24,7 @@ function Login() {
     // Email
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
-    //const [isLoggedIn, setIsLoggedIn] = useState(false); // Add a state variable for login status
+    
     const [isButtons, setIsButtons] = useState(false); // Add a state variable for login status
 
      
@@ -51,7 +51,7 @@ function Login() {
   const handleApi = () => {
     console.log({ email, password });
     axios
-      .post('https://reqres.in/api/login', {
+      .post('https://vc5kqp87-3000.usw3.devtunnels.ms/api/v1/adminsauth/login', {
         email: email,
         password: password,
       })

@@ -13,14 +13,33 @@ function CreateWord() {
   const [words, setWords] = useState([]);
   
   const [expandedCategoryId, setExpandedCategoryId] = useState(null);
+  
+  useEffect(() => {
+    axios.get('https://vc5kqp87-3000.usw3.devtunnels.ms/api/v1/categories/getall')
+      .then(res => {
+        console.log('API Response category:', res.data); // Log the API response data
+        setCategories(res.data.categories); // Update the admins state with the fetched data
+      })
+      .catch(err => console.log('API Error:', err)); // Log any API errors
+  }, []); // Empty dependency array to run the effect only once
 
-  
-  
+  console.log('categories Array:', categories); // Log the state of the admins array
+
+  useEffect(() => {
+    axios.get('https://vc5kqp87-3000.usw3.devtunnels.ms/api/v1/words/getall')
+      .then(res => {
+        console.log('API Response words:', res.data); // Log the API response data
+        setWords(res.data.words); // Update the admins state with the fetched data
+      })
+      .catch(err => console.log('API Error:', err)); // Log any API errors
+  }, []); // Empty dependency array to run the effect only once
+
+  console.log('words Array:', words); // Log the state of the admins array
+
   const buttons = [
     { label: 'Crear Palabra', link: '/create-category' },
     { label: 'Tutorial', link: '/create-category-tutorial' },
   ];
-
  
   const toggleExpansion = (categoryId) => {
     if (expandedCategoryId === categoryId) {
@@ -111,23 +130,23 @@ function CreateWord() {
         <div className='navbar'> 
           <NavbarUser buttons={buttons} />
         </div>
-        <div class="container">
-         <div class="row">
-         <div class="col">
+        <div className="container">
+         <div className="row">
+          <div className="col">
             <h1 className='base-datos'>Base de datos</h1>
             <h2 className='palabras-actuales'>Palabras actuales</h2>
-            {categoriesArray.map((jsonData) => (
-          <div className='box' key={jsonData.id}>
-          <button onClick={() => toggleExpansion(jsonData.id)}>
-            {expandedCategoryId === jsonData.id ? '▼' : '▲'} {jsonData.name}
-          </button>
-          {expandedCategoryId === jsonData.id && (
-            <div>
-              {wordsArray
-                .filter((words) => words.categoryid === jsonData.id)
-                .map((matchingWordData) => (
+              {categories.map((categories) => (
+              <div className='box' key={categories.id}>
+              < button onClick={() => toggleExpansion(categories.id)}>
+                {expandedCategoryId === categories.id ? '▼' : '▲'} {categories.name}
+              </button>
+              {expandedCategoryId === categories.id && (
+              <div>
+              {words
+                .filter(word => word.categoryid === categories.id)
+                .map(matchingWordData => (
                   <div key={matchingWordData.id}>
-                    <li>{matchingWordData.word}</li>
+                    <button>{matchingWordData.word}</button>
                   </div>
                 ))}
             </div>
@@ -138,8 +157,7 @@ function CreateWord() {
        <div class="col">
         <h1>Crear Palabra </h1>
         <form onSubmit={handleSubmit}>
-        <label className='category-label'>
-        <strong>Selecciona la categoria:</strong>
+        <label><strong>Selecciona la categoria:</strong></label>
             <br />
             <input
               type="number"
@@ -147,10 +165,8 @@ function CreateWord() {
               value={wordData.categoryid}
               onChange={handleChange}
             />
-          </label>
           <br />
-          <label>
-          <strong>Añade la palabra:</strong>
+          <label><strong>Añade la palabra:</strong></label>
             <br />
             <input
               type="text"
@@ -158,28 +174,24 @@ function CreateWord() {
               value={wordData.word}
               onChange={handleChange}
             />
-          </label>
-          <label>
-          <strong>Añade el Sugerido 1:  </strong>
+          <label><strong>Añade el Sugerido 1:  </strong></label>
+
             <input
               type="text"
               name="suggested1"
               value={wordData.suggested1}
               onChange={handleChange}
             />
-          </label>
-          <label>
-          <strong>Añade el Sugerido 2:   </strong>
+          <label><strong>Añade el Sugerido 2:   </strong></label>
+
             <input
               type="text"
               name="suggested2"
               value={wordData.suggested2}
               onChange={handleChange}
             />
-          </label>
           <br />
-          <label>
-          <strong>Añade la definición:</strong>
+          <label><strong>Añade la definición:</strong></label>
             <br />
             <input
               type="text"
@@ -187,11 +199,11 @@ function CreateWord() {
               value={wordData.definition}
               onChange={handleChange}
             />
-          </label>
+          
           
           <br />
-          <label>
-          <strong>Añade los idsettings:</strong>
+          <label><strong>Añade los idsettings:</strong></label>
+
             <br />
             <input
               type="number"
@@ -199,10 +211,9 @@ function CreateWord() {
               value={wordData.idsettings}
               onChange={handleChange}
             />
-          </label>
           <br />
-          <label>
-          <strong>Añade la imagen:</strong>
+          <label><strong>Añade la imagen:</strong></label>
+
             <br /><br />
             <input
               type="file"
@@ -210,10 +221,8 @@ function CreateWord() {
               accept="image/*"
               onChange={handleChange}
             />
-          </label>
           <br />
-          <label>
-          <strong>Añade el audio:</strong>
+          <label><strong>Añade el audio:</strong></label>
             <br /><br />
             <input
               type="file"
@@ -221,10 +230,9 @@ function CreateWord() {
               accept="audio/*"
               onChange={handleChange}
             />
-          </label>
           <br />
-          <label>
-          <strong>Añade el video:</strong>
+          <label><strong>Añade el video:</strong></label>
+
             <br /><br />
             <input
               type="file"
@@ -232,7 +240,6 @@ function CreateWord() {
               accept="video/*"
               onChange={handleChange}
             />
-          </label>
           <br />
           <label>
           <strong>Es escaneable:</strong>

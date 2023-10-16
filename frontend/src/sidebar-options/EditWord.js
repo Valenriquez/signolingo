@@ -9,11 +9,26 @@ import axios from 'axios';
 
 function EditWord() {
   const [categories, setCategories] = useState([]);
+  const [words, setWords] = useState([]); 
+
+
+
   const [expandedCategoryId, setExpandedCategoryId] = useState(null);
-  const [selectWord, setSelectWord] = useState("");
   const [selectedWord, setSelectedWord] = useState(null); // Add this line
   const [selectedWordId, setSelectedWordId] = useState(null);
 
+  const buttons = [
+    { label: 'Editar Palabra', link: '/create-category' },
+    { label: 'Tutorial', link: '/create-category-tutorial' },
+  ];
+
+  const toggleExpansion = (categoryId) => {
+    if (expandedCategoryId === categoryId) {
+      setExpandedCategoryId(null);
+    } else {
+      setExpandedCategoryId(categoryId);
+    }
+  };
 
   useEffect(() => {
     const apiUrl = 'https://vc5kqp87-3000.usw3.devtunnels.ms/api/v1/categories/getall';
@@ -26,11 +41,6 @@ function EditWord() {
         console.error('Error fetching categories:', error);
       });
   }, []);
-
-  const buttons = [
-    { label: 'Editar Palabra', link: '/create-category' },
-    { label: 'Tutorial', link: '/create-category-tutorial' },
-  ];
 
   const [categoryData, setCategoryData] = useState({
     name: '',
@@ -89,7 +99,6 @@ function EditWord() {
   };
 
   const [editMode, setEditMode] = useState(false);
-  const [words, setWords] = useState([]); 
   const categoriesArray = jsonData.categories; 
 
   const handleWordSelect = (word) => {
@@ -159,13 +168,7 @@ function EditWord() {
     });
   };
  
-  const toggleExpansion = (categoryId) => {
-    if (expandedCategoryId === categoryId) {
-      setExpandedCategoryId(null);
-    } else {
-      setExpandedCategoryId(categoryId);
-    }
-  };
+  
 
   const handleFormSubmit = (e) => {
     e.preventDefault();
