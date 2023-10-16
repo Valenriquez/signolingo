@@ -40,5 +40,11 @@ module.exports = {
                 WHERE categoryid = ${categoryid}
                 ORDER BY word`
         return dbService.querypromise(sql);
-    } 
+    },
+    getWordByName: (word) => {
+        sql = ` SELECT id, word, categoryid, definition, image, suggested1, suggested2, video, idsettings, isscannable, audio
+                FROM words 
+                WHERE word = '${word}'`
+        return dbService.querypromise(sql);
+    }
 }

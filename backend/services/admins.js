@@ -2,14 +2,14 @@ const dbService = require('../config/db.js')
 
 module.exports = {
     getAdmin: (id) => {
-        sql = ` SELECT id, email, name, isSuperUser
+        sql = ` SELECT id, email, username, isSuperUser
                 FROM admins 
                 WHERE id = ${id}`
 
         return dbService.querypromise(sql);
     },
     getAllAdmins: () => {
-        sql = "SELECT id, email, name, isSuperUser FROM admins"
+        sql = "SELECT id, email, username, isSuperUser FROM admins"
         return dbService.querypromise(sql);
     },
     deleteAdmin: (id) => {
@@ -19,9 +19,9 @@ module.exports = {
         return dbService.querypromise(sql);
     }, 
     addAdmin: (body) => {
-        const {email, name, password, issuperuser} = body;
-        sql = ` INSERT INTO admins(email, name, password, issuperuser)
-                VALUES('${email}', '${name}', '${password}', '${issuperuser}') 
+        const {email, username, password, issuperuser} = body;
+        sql = ` INSERT INTO admins(email, username, password, issuperuser)
+                VALUES('${email}', '${username}', '${password}', '${issuperuser}') 
                 RETURNING *`
         return dbService.querypromise(sql);
     },

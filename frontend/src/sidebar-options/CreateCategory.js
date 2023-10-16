@@ -18,56 +18,6 @@ function CreateCategory() {
   const [expandedCategoryId, setExpandedCategoryId] = useState(null);
 
 
-  useEffect(() => {
-    const apiUrl = 'https://vc5kqp87-3000.usw3.devtunnels.ms/api/v1/categories/getall';
-    axios.get(apiUrl)
-      .then(response => {
-        setCategories(response.data);
-      })
-      .catch(error => {
-        console.error('Error fetching data:', error);
-      });
-  }, []);
-
-
-  useEffect(() => {
-    const apiUrl = 'https://vc5kqp87-3000.usw3.devtunnels.ms/api/v1/words/getall';
-    axios.get(apiUrl)
-      .then(response => {
-        setWords(response.data);
-      })
-      .catch(error => {
-        console.error('Error fetching data:', error);
-      });
-  }, []);
-
-  axios.get('https://vc5kqp87-3000.usw3.devtunnels.ms/api/v1/categories/getall')
-  .then(function (response) {
-     if (response.data && response.data.categories) {
-       const categoryNames = response.data.categories.map(category => category.name);
-
-       console.log('Category names:', categoryNames);
-    } else {
-      console.log('No categories found in the response.');
-    }
-  })
-  .catch(function (error) {
-    console.error('Error fetching data:', error);
-  });
-
-  axios.get('https://vc5kqp87-3000.usw3.devtunnels.ms/api/v1/words/getall')
-  .then(function (response) {
-     if (response.data && response.data.categories) {
-       const wordsNames = response.data.words.map(words => words.word);
-
-       console.log('Word names:', wordsNames);
-    } else {
-      console.log('No words found in the response.');
-    }
-  })
-  .catch(function (error) {
-    console.error('Error fetching data:', error);
-  });
 
   
   const buttons = [
@@ -114,7 +64,9 @@ function CreateCategory() {
       ...categoryData,
       [name]: type === 'checkbox' ? e.target.checked : value,
     });
+    console.log(categoryData); // This logs the entire categoryData object to the console
   };
+
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -124,6 +76,8 @@ function CreateCategory() {
     formData.append('icon', categoryData.icon);
     formData.append('idsettings', categoryData.idsettings);
     formData.append('isscannable', categoryData.isscannable);
+    console.log(categoryData); // This logs the entire categoryData object to the console
+
 
     // Define the URL where you want to send the POST request
     const apiUrl = "https://vc5kqp87-3000.usw3.devtunnels.ms/api/v1/categories/add";

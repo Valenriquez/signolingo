@@ -10,7 +10,7 @@ import GetAllAdmins from '../GetAllAdmins.json';
 import axios from "axios";
 
 
- import { useAuth } from './AuthContext';
+import { useAuth } from './AuthContext';
 //"email": "eve.holt@reqres.in",
 // "password": "cityslicka"
 

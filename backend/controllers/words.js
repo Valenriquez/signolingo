@@ -54,7 +54,21 @@ module.exports = {
     getWordsByCategory: async (req, res) => {
         const categoryid = req.params.categoryid;
         try {
-            const words = await WordService.getWordsByCategory(categoryid); 
+            const wordsFiltered = await WordService.getWordsByCategory(categoryid); 
+            res.json({wordsFiltered});
+        } 
+        catch (err) {
+            res.json({"mesasge": `Error: ${err}`})
+        }
+    },
+    getWordByName: async (req, res) => {
+        const word = req.params.word;
+        const apikey = req.body.apikey;
+        try {
+            if (apikey !== process.env.API_KEY) {
+                throw new Error('Invalid API Key')
+            }
+            const words = await WordService.getWordByName(word); 
             res.json({words});
         } 
         catch (err) {

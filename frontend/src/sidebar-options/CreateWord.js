@@ -12,19 +12,9 @@ function CreateWord() {
   const [categories, setCategories] = useState([]);
   const [words, setWords] = useState([]);
   
-  
   const [expandedCategoryId, setExpandedCategoryId] = useState(null);
 
-  useEffect(() => {
-    const apiUrl = 'https://vc5kqp87-3000.usw3.devtunnels.ms/api/v1/categories/getall';
-    axios.get(apiUrl)
-      .then(response => {
-        setCategories(response.data);
-      })
-      .catch(error => {
-        console.error('Error fetching data:', error);
-      });
-  }, []);
+  
   
   const buttons = [
     { label: 'Crear Palabra', link: '/create-category' },
@@ -40,27 +30,25 @@ function CreateWord() {
     }
   };
 
-  const categoriesArray = jsonData.categories;
-  const wordsArray = words.words;
+  const categoriesArray = jsonData.categories; // REEMPLAZAR
+  const wordsArray = words.words; // REEMPLAZAR
 
   const [wordData, setWordData] = useState({
-    id: 0,
     word: '',
     categoryid: 0,
     definition: '',
-    image: null, // Use null to store the selected file
+    image: null,  
     suggested1: '',
     suggested2: '',
-    video: null, // Use null to store the selected file
+    video: null,  
     idsettings: 1,
     isscannable: false,
-    audio: null, // Use null to store the selected file
+    audio: null, 
   });
 
   function resetForm() {
     setWordData({
     ...wordData,
-    id: 0,
     word: '',
     categoryid: 0,
     definition: '',
@@ -80,6 +68,8 @@ function CreateWord() {
       ...wordData,
       [name]: type === 'checkbox' ? e.target.checked : value,
     });
+    console.log(wordData); // This logs the entire categoryData object to the console
+
   };
 
   const handleFileChange = (e) => {
@@ -90,12 +80,8 @@ function CreateWord() {
     });
   };
 
- 
-
   const handleSubmit = (e) => {
     e.preventDefault();
-
-    // Create a FormData object to send the file data
     const formData = new FormData();
     formData.append('image', wordData.image);
     formData.append('audio', wordData.audio);
@@ -173,6 +159,24 @@ function CreateWord() {
               onChange={handleChange}
             />
           </label>
+          <label>
+          <strong>Añade el Sugerido 1:  </strong>
+            <input
+              type="text"
+              name="suggested1"
+              value={wordData.suggested1}
+              onChange={handleChange}
+            />
+          </label>
+          <label>
+          <strong>Añade el Sugerido 2:   </strong>
+            <input
+              type="text"
+              name="suggested2"
+              value={wordData.suggested2}
+              onChange={handleChange}
+            />
+          </label>
           <br />
           <label>
           <strong>Añade la definición:</strong>
@@ -184,6 +188,7 @@ function CreateWord() {
               onChange={handleChange}
             />
           </label>
+          
           <br />
           <label>
           <strong>Añade los idsettings:</strong>
@@ -203,7 +208,7 @@ function CreateWord() {
               type="file"
               name="image"
               accept="image/*"
-              onChange={handleFileChange}
+              onChange={handleChange}
             />
           </label>
           <br />
@@ -214,7 +219,7 @@ function CreateWord() {
               type="file"
               name="audio"
               accept="audio/*"
-              onChange={handleFileChange}
+              onChange={handleChange}
             />
           </label>
           <br />
@@ -225,7 +230,7 @@ function CreateWord() {
               type="file"
               name="video"
               accept="video/*"
-              onChange={handleFileChange}
+              onChange={handleChange}
             />
           </label>
           <br />
