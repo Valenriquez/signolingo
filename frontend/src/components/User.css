@@ -3,13 +3,6 @@
     font-size: large;
 }
 
-.col-md-9-principal {
-    padding: 50px;
-    position: relative;
-    top: -1200px;
-    left: 20%;
-}
-
 .navbar {
     position: absolute;
     top: 0;
@@ -29,9 +22,9 @@
 }
 
 .image {
-    width: 600px; /* Set the desired width */
+    width: 500px; /* Set the desired width */
     height: auto; /* Automatically adjust the height to maintain the aspect ratio */
-    left: 1200px;
-    top: -2100px;
+    left: 1100px;
+    top: -1800px;
     position: relative;
   }

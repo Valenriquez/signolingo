@@ -24,6 +24,8 @@ function Login() {
     // Email
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
+    const [isSuperUser, setIsSuperUser] = useState(false);
+
     
     const [isButtons, setIsButtons] = useState(false); // Add a state variable for login status
 
@@ -36,9 +38,9 @@ function Login() {
     const handlePassword = (e) => {
         setPassword(e.target.value)
     }
+
+    
     // Super User
-    const [isSuperUser, setIsSuperUser] = useState(false);
-    const superUserJson =  GetAllAdmins.admins.map(admin => admin.issuperuser);
 
 
     //      console.log(isUserCorrect);
@@ -54,9 +56,13 @@ function Login() {
       .post('https://vc5kqp87-3000.usw3.devtunnels.ms/api/v1/adminsauth/login', {
         email: email,
         password: password,
+        isSuperUser: isSuperUser
       })
       .then((result) => {
-        console.log(result.data);
+        if (result.data.issuperuser) {
+            setIsSuperUser(true);
+            console.log("SI ES SUPER USUSARIO", isSuperUser)
+        } 
         setIsButtons(true);
         login(); // Call the login function from the context to set isLoggedIn to true
       })
@@ -95,7 +101,7 @@ function Login() {
                         type="password"
                         placeholder="Contraseña"
                     />
-                   
+                
                     <div>
                         <br />
                         <button className="btn btn-outline-success" onClick={handleApi} >Ingresa</button>
@@ -104,27 +110,28 @@ function Login() {
              
             <br/>
             {isButtons && (
-                 <div className="buttons">
-                 <Link to="/home">
-                     <button className="btn btn-outline-success">
+                <div className="buttons">
+                    <Link to="/home">
+                    <button className="btn btn-outline-success">
                         Inicio
-                     </button>
-                 </Link>
-                 <Link to="/see-admins">
-                     <button className="btn btn-outline-success" style={{ margin: '10px' }}>
-                        Ver Administradores
-                     </button>
-                 </Link>
-                 {isSuperUser && (
-                     <Link to="/superuser-action">
-                         <button className="btn btn-outline-success" style={{ margin: '10px' }}>
-                            Superuser Action
-                         </button>
-                     </Link>
-                 )}
-             </div>
-      )}
-      </div>
+                    </button>
+                    </Link>
+                </div>
+             )}
+            
+
+            {isSuperUser && (
+            <div className="buttons">
+            <Link to="/see-admins">
+                <button className="btn btn-outline-success" style={{ margin: '10px' }}>
+                    Ver Administradores
+                </button>   
+            </Link>
+             
+            
+        </div>
+        )}
+        </div>
         </>
     );
 }

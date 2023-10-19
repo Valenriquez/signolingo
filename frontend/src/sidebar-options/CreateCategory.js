@@ -8,11 +8,18 @@ import axios from 'axios';
 
 // Categories: https://vc5kqp87-3000.usw3.devtunnels.ms/api/v1/categories/getall
 
-
+// ame":"Comida","color":"verde","icon":"fork.knife","idsettings":1,"isscannable":fals
 function CreateCategory() {
  
   const [categories, setCategories] = useState([]);
   const [words, setWords] = useState([]);
+
+  const [name, setName] = useState('')
+  const [color, setColor] = useState('')
+  const [icon, setIcon] = useState('')
+  const [idsettings, setIdsettings] = useState(0)
+  const [isscannable, setIsscannable] = useState(false)
+  //<button type="submit" className="custom-button">Añadir</button>
 
 
   const [expandedCategoryId, setExpandedCategoryId] = useState(null);
@@ -54,7 +61,7 @@ function CreateCategory() {
     }
   };
 
-  const [categoryData, setcategoryData] = useState({
+  const [categoryData, setCategoryData] = useState({
     name: '',
     color: '',
     icon: '',
@@ -64,60 +71,58 @@ function CreateCategory() {
 
   function resetForm() {
     console.log('resetForm function is triggered');  
-    setcategoryData({
+    setCategoryData({
       ...categoryData,
       name: '',
       color: '',
       icon: '',
-      idsettings:'', 
+      idsettings:0, 
       isscannable: false, 
     });
   }
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    const formData = new FormData();
-    formData.append('name', categoryData.name)
-    formData.append('color', categoryData.color);
-    formData.append('icon', categoryData.icon);
-    formData.append('idsettings', categoryData.idsettings);
-    formData.append('isscannable', categoryData.isscannable);
-    console.log(categoryData);  
+  // ame":"Comida","color":"verde","icon":"fork.knife","idsettings":1,"isscannable":fals
 
-    
-    const apiUrl = "https://vc5kqp87-3000.usw3.devtunnels.ms/api/v1/categories/add";
+  const handleName = (e) => {
+    setName(e.target.value)
+  }
 
-    axios.post(apiUrl, formData)
-      .then(function (response) {
-        alert('sucess');
-        console.log('category added successfully:', response.data);
+  const handleColor = (e) => {
+    setColor(e.target.value)
+  }
+
+  const handleIcon = (e) => {
+    setIcon(e.target.value)
+  }
+
+  const handleIdsettings = (e) => {
+    setIdsettings(e.target.value)
+  }
+
+  const handleIsscannable = (e) => {
+    setIsscannable(e.target.checked)
+  }
+ 
+
+
+  const handleApiForCategory = () => {
+    console.log({ name, color, icon, idsettings, isscannable });
+    axios
+      .post("https://vc5kqp87-3000.usw3.devtunnels.ms/api/v1/categories/add", {
+        name: name,
+        color: color,
+        icon: icon,
+        idsettings: idsettings, 
+        isscannable: isscannable
       })
-      .catch(function (error) {
+      .then((result) => {
+        console.log(result.data);
+       })
+      .catch((error) => {
         alert('service error');
-        console.error('Error adding word:', error);
+         console.log(error);
       });
-  };
-
-  const handleChange = (e) => {
-    const { name, value, type, checked } = e.target;
-    let newValue;
-  
-    if (type === 'checkbox') {
-      newValue = checked;
-    } else if (name === 'idsettings') {
-      // Ensure that idsettings is a valid integer
-      console.log('idsettings must be a valid integer');
-      newValue = parseInt(value); // Convert the value to an integer
-    } else {
-      newValue = value;
-    }
-  
-    setcategoryData({
-      ...categoryData,
-      [name]: newValue,
-    });
-  };
-
+  }
   return (
     <>
         <Sidebar />
@@ -150,15 +155,15 @@ function CreateCategory() {
       </div>
        <div class="col">
         <h1>Crear Categoría </h1>
-        <form onSubmit={handleSubmit}>
-          <label>
+           <label>
           <strong>Añade el nombre:</strong>
             <br />
             <input
               type="text"
               name="name"
-              value={categoryData.name}
-              onChange={handleChange}
+              value={name}
+              onChange={handleName}
+              className="input"
               autoComplete="off"
             />
           </label>
@@ -169,8 +174,9 @@ function CreateCategory() {
             <input
               type="text"
               name="color"
-              value={categoryData.color}
-              onChange={handleChange}
+              value={color}
+              onChange={handleColor}
+              className="input"
               autoComplete="off"
             />
           </label>
@@ -181,8 +187,9 @@ function CreateCategory() {
             <input
               type="text"
               name="icon"
-              value={categoryData.icon}
-              onChange={handleChange}
+              value={icon}
+              onChange={handleIcon}
+              className="input"
               autoComplete="off"
             />
           </label>
@@ -192,8 +199,9 @@ function CreateCategory() {
             <input
               type="number"
               name="idsettings"
-              value={categoryData.idsettings}
-              onChange={handleChange}
+              value={idsettings}
+              onChange={handleIdsettings}
+              className="input"
               autoComplete="off"
             />
           </label>
@@ -204,15 +212,16 @@ function CreateCategory() {
             <input
               type="checkbox"
               name="isscannable"
-              checked={categoryData.isscannable}
-              onChange={handleChange}
+              checked={isscannable}
+              className="input"
+              onChange={handleIsscannable}
              />
           </label>
           <br /><br />
-          <button type="submit" className="custom-button">Añadir</button>
+          <button className="custom-button" onClick={handleApiForCategory} >Añadir</button>
+
           <button type="button" onClick={resetForm}>Limpiar</button>
-         </form>
-      </div>
+       </div>
       </div>
       </div>
         </>

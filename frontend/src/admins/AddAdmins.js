@@ -7,12 +7,12 @@ import { Link } from 'react-router-dom';
 // "name": "morpheus",
 // "job": "leader"
 
-//  https://vc5kqp87-3000.usw3.devtunnels.ms/api/v1/adminsauth/add
+    //  https://vc5kqp87-3000.usw3.devtunnels.ms/api/v1/adminsauth/add
 
 function AddAdmins() {
-    const [name, setName] = useState('')
+    const [username, setUsername] = useState('')
     const [email, setEmail] = useState('')
-    const [job, setJob] = useState('')
+    const [issuperuser, setIssuperuser] = useState(false)
     const [success, setSuccess] = useState(false); // State to track success
 
 
@@ -21,7 +21,7 @@ function AddAdmins() {
 
     function handleSubmit(event) {
         event.preventDefault();
-        axios.post('https://reqres.in/api/users', {name, job})
+        axios.post('https://vc5kqp87-3000.usw3.devtunnels.ms/api/v1/admins/add', {username, email, issuperuser})
         .then(res => {
             console.log(res);
             setSuccess(true); // Set success to true
@@ -34,20 +34,27 @@ function AddAdmins() {
                 <h2>Añadir Administrador(a)</h2>
                 {success && ( // Conditionally render the success message
             <div className="alert alert-success" role="alert">
-              User added successfully!
+              Se añadió exitosamente el administrador!
             </div>
           )}
                 <div className='mb-2'>
-                    <label htmlFor=''>Nombre</label>
+                    <label htmlFor=''>Username: </label>
                     <input type='text' placeholder='Ingresa el nombre ' className='form-control' 
-                    onChange={e => setName(e.target.value)}
+                    onChange={e => setUsername(e.target.value)}
                     />
                 </div>
                 <div className='mb-2'>
-                    <label htmlFor=''>job</label>
+                    <label htmlFor=''>Email: </label>
                     <input type='text' placeholder='Ingresa el email ' className='form-control' 
-                    onChange={e => setJob(e.target.value)}
+                    onChange={e => setEmail(e.target.value)}
                     />
+                </div>
+                <div className='mb-2'>  
+                <label htmlFor=''>Es SuperUser: </label>
+                     <input
+                        input type='checkbox'
+                        onChange={e => setIssuperuser(e.target.checked)}
+                      />
                 </div>
                 <button className='btn btn-success'>Listo</button>
                 <Link to="/see-admins">

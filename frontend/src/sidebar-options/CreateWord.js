@@ -5,8 +5,7 @@ import Sidebar from '../components/Sidebar';
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import './CreateWord.css';
-import jsonData from './getAllCategories.json';
-import words from './getAllWords.json';
+
 
 function CreateWord() {
   const [categories, setCategories] = useState([]);
@@ -14,6 +13,21 @@ function CreateWord() {
   
   const [expandedCategoryId, setExpandedCategoryId] = useState(null);
   
+  // {"id":28,"word":"Rojo","categoryid":17,"definition":"Lorem ipsum dolor sit amet, consectetur adipiscing elit",
+  //"image":"red","suggested1":"Amarillo","suggested2":"Azul","video":"Alimentos_7_Rojo","idsettings":1,
+  //"isscannable":false,"audio":"Manzana"}]}
+  const [word, setWord] = useState('')
+  const [categoryid, setCategoryid] = useState(0)
+  const [definition, setDefinition] = useState('')
+  const [image, setImage] = useState('')
+  const [suggested1, setSuggested1] = useState('')
+  const [suggested2, setSuggested2] = useState('')
+  const [video, setVideo] = useState('')
+  const [idsettings, setIdsettings] = useState(1)
+  const [isscannable, setIsscannable] = useState(false)
+  const [audio, setAudio] = useState('')
+
+
   useEffect(() => {
     axios.get('https://vc5kqp87-3000.usw3.devtunnels.ms/api/v1/categories/getall')
       .then(res => {
@@ -37,8 +51,8 @@ function CreateWord() {
   console.log('words Array:', words); // Log the state of the admins array
 
   const buttons = [
-    { label: 'Crear Palabra', link: '/create-category' },
-    { label: 'Tutorial', link: '/create-category-tutorial' },
+    { label: 'Crear Palabra', link: '/create-word' },
+    { label: 'Tutorial', link: '/tutorial' },
   ];
  
   const toggleExpansion = (categoryId) => {
@@ -48,9 +62,7 @@ function CreateWord() {
       setExpandedCategoryId(categoryId);
     }
   };
-
-  const categoriesArray = jsonData.categories; // REEMPLAZAR
-  const wordsArray = words.words; // REEMPLAZAR
+ 
 
   const [wordData, setWordData] = useState({
     word: '',
@@ -124,6 +136,79 @@ function CreateWord() {
       });
   };
 
+
+   // {"id":28,"word":"Rojo","categoryid":17,"definition":"Lorem ipsum dolor sit amet, consectetur adipiscing elit",
+  //"image":"red","suggested1":"Amarillo","suggested2":"Azul","video":"Alimentos_7_Rojo","idsettings":1,
+  //"isscannable":false,"audio":"Manzana"}]}
+  const handleWord = (e) => {
+    setWord(e.target.value)
+  }
+
+  const handleCategoryid = (e) => {
+    setCategoryid(e.target.value)
+  }
+
+  const handleDefinition = (e) => {
+    setDefinition(e.target.value)
+  }
+
+  const handleImage = (e) => {
+    setImage(e.target.value)
+  }
+
+  const handleSuggested1 = (e) => {
+    setSuggested1(e.target.value)
+  }
+ 
+  const handleSuggested2 = (e) => {
+    setSuggested2(e.target.value)
+  }
+
+  const handleVideo = (e) => {
+    setVideo(e.target.value)
+  }
+
+  const handleIdsettings= (e) => {
+    setIdsettings(e.target.checked)
+  }
+
+  const handleIsscannable = (e) => {
+    setIsscannable(e.target.checked)
+  }
+
+  const handleAudio = (e) => {
+    setAudio(e.target.value)
+  }
+
+
+  // {"id":28,"word":"Rojo","categoryid":17,"definition":"Lorem ipsum dolor sit amet, consectetur adipiscing elit",
+  //"image":"red","suggested1":"Amarillo","suggested2":"Azul","video":"Alimentos_7_Rojo","idsettings":1,
+  //"isscannable":false,"audio":"Manzana"}]}
+  const handleApiForWord = () => {
+    console.log({ word, categoryid, definition, image, suggested1, suggested2, video, idsettings, isscannable, audio });
+    axios
+      .post("https://vc5kqp87-3000.usw3.devtunnels.ms/api/v1/words/add", {
+        word: word, 
+        categoryid: categoryid, 
+        definition: definition, 
+        image: image, 
+        suggested1: suggested1, 
+        suggested2: suggested2, 
+        video: video, 
+        idsettings: idsettings, 
+        isscannable: isscannable,
+        audio: audio
+      })
+      .then((result) => {
+        console.log('Word added successfully:', result.data);
+        alert('success');
+        })
+      .catch((error) => {
+        alert('service error');
+         console.log(error);
+      });
+  }
+
   return (
     <>
          <Sidebar />
@@ -156,14 +241,16 @@ function CreateWord() {
       </div>
        <div class="col">
         <h1>Crear Palabra </h1>
-        <form onSubmit={handleSubmit}>
-        <label><strong>Selecciona la categoria:</strong></label>
+         <label><strong>Selecciona la categoria:</strong></label>
             <br />
             <input
               type="number"
               name="categoryid"
-              value={wordData.categoryid}
-              onChange={handleChange}
+              value={categoryid}
+              onChange={handleCategoryid}
+              className="input"
+              autoComplete="off"
+
             />
           <br />
           <label><strong>Añade la palabra:</strong></label>
@@ -171,24 +258,30 @@ function CreateWord() {
             <input
               type="text"
               name="word"
-              value={wordData.word}
-              onChange={handleChange}
+              value={word}
+              onChange={handleWord}
+              className="input"
+              autoComplete="off"
             />
           <label><strong>Añade el Sugerido 1:  </strong></label>
 
             <input
               type="text"
               name="suggested1"
-              value={wordData.suggested1}
-              onChange={handleChange}
+              value={suggested1}
+              onChange={handleSuggested1}
+              className="input"
+              autoComplete="off"
             />
           <label><strong>Añade el Sugerido 2:   </strong></label>
 
             <input
               type="text"
               name="suggested2"
-              value={wordData.suggested2}
-              onChange={handleChange}
+              value={suggested2}
+              onChange={handleSuggested2}
+              className="input"
+              autoComplete="off"
             />
           <br />
           <label><strong>Añade la definición:</strong></label>
@@ -196,8 +289,10 @@ function CreateWord() {
             <input
               type="text"
               name="definition"
-              value={wordData.definition}
-              onChange={handleChange}
+              value={definition}
+              onChange={handleDefinition}
+              className="input"
+              autoComplete="off"
             />
           
           
@@ -208,54 +303,64 @@ function CreateWord() {
             <input
               type="number"
               name="idsettings"
-              value={wordData.idsettings}
-              onChange={handleChange}
+              value={idsettings}
+              onChange={handleIdsettings}
+              className="input"
+              autoComplete="off"
             />
           <br />
           <label><strong>Añade la imagen:</strong></label>
 
             <br /><br />
             <input
-              type="file"
+              type="text"
               name="image"
-              accept="image/*"
-              onChange={handleChange}
+              value={image}
+              onChange={handleImage}
+              className="input"
+              autoComplete="off"
+
+              
             />
           <br />
           <label><strong>Añade el audio:</strong></label>
             <br /><br />
             <input
-              type="file"
+              type="text"
               name="audio"
-              accept="audio/*"
-              onChange={handleChange}
+              value={audio}
+              onChange={handleAudio}
+              className="input"
+              autoComplete="off"
             />
           <br />
           <label><strong>Añade el video:</strong></label>
 
             <br /><br />
             <input
-              type="file"
+              type="text"
               name="video"
-              accept="video/*"
-              onChange={handleChange}
+              value={video}
+              onChange={handleVideo}
+              className="input"
+              autoComplete="off"
             />
           <br />
           <label>
           <strong>Es escaneable:</strong>
           <br />
             <input
-              type="checkbox"
-              name="isscannable"
-              checked={wordData.isscannable}
-              onChange={handleChange}
+               type="checkbox"
+               name="isscannable"
+               checked={isscannable}
+               className="input"
+               onChange={handleIsscannable}
             />
           </label>
           <br /><br />
-          <button type="submit" className="custom-button">Añadir</button>
+          <button className="custom-button" onClick={handleApiForWord} >Añadir</button>
           <button type="button" onClick={resetForm}>Limpiar</button>
-        </form>
-      </div>
+       </div>
       </div>
       </div>
         </>

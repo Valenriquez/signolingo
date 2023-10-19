@@ -30,12 +30,17 @@ import EditWord from './sidebar-options/EditWord';
 // STATS 
 import Stats from './components/Stats';
 
+// editing  
+import UpdateCategory from './sidebar-options/UpdateCategory';
+import UpdateWord from './sidebar-options/UpdateWord';
+
 function App(){
   function ProtectedRoute({ element }) {
     const { isLoggedIn } = useAuth(); // Use your authentication context to check if the user is logged in
     console.log('isLoggedIn:', isLoggedIn); // Log the authentication status
 
-    if (isLoggedIn || isLoggedIn === false) {  /// MODIFICARRRR SI EL LOGIN SIRVE
+    // if (isLoggedIn || isLoggedIn === false) { 
+    if (isLoggedIn){  /// MODIFICARRRR SI EL LOGIN SIRVE
       return element; // Render the element (e.g., the home page) for authenticated users
     } else {
       return <Navigate to="/" />; // Redirect to the login page for unauthenticated users
@@ -61,6 +66,8 @@ function App(){
           <Route path="/see-admins" element={<SeeAdmins/>} />
           <Route path="/add-admins" element={<AddAdmins/>} />
           <Route path="/stats" element={<Stats/>} />
+          <Route path="/update-category/:id" element={<UpdateCategory/>} />
+          <Route path="/update-word/:id" element={<UpdateWord/>} />
         </Routes>
       </BrowserRouter>
     </React.Fragment>
