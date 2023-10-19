@@ -28,6 +28,8 @@ function Login() {
 
     
     const [isButtons, setIsButtons] = useState(false); // Add a state variable for login status
+    const [successLoggedIn, setSuccessLoggedIn] = useState(false); // Add a state variable for login status
+
 
      
     console.log({ email, password })
@@ -50,7 +52,15 @@ function Login() {
 
     const { login, logout } = useAuth();
 
-  const handleApi = () => {
+   
+    const handleApi = () => {
+    const button = document.querySelector('.btn-outline-success');
+
+    if (button) {
+        // Add the "hidden" class to hide the button
+        button.classList.add('hidden');
+        
+    }
     console.log({ email, password });
     axios
       .post('https://vc5kqp87-3000.usw3.devtunnels.ms/api/v1/adminsauth/login', {
@@ -64,10 +74,11 @@ function Login() {
             console.log("SI ES SUPER USUSARIO", isSuperUser)
         } 
         setIsButtons(true);
+        setSuccessLoggedIn(true); // Set success to true
         login(); // Call the login function from the context to set isLoggedIn to true
       })
       .catch((error) => {
-        alert('service error');
+        alert('El correo electrónico y/o la contraseña son incorrectos');
         setIsButtons(false);
         logout(); // Call the logout function from the context to set isLoggedIn to false
         console.log(error);
@@ -109,6 +120,11 @@ function Login() {
                     </div>
              
             <br/>
+            {successLoggedIn && (  
+                <div className="alert alert-success" role="alert">
+                 ¡Se ingresó exitosamente!
+                </div>
+            )}
             {isButtons && (
                 <div className="buttons">
                     <Link to="/home">
@@ -123,7 +139,8 @@ function Login() {
             {isSuperUser && (
             <div className="buttons">
             <Link to="/see-admins">
-                <button className="btn btn-outline-success" style={{ margin: '10px' }}>
+                <br />
+                <button className="btn btn-outline-success" >
                     Ver Administradores
                 </button>   
             </Link>

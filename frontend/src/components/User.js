@@ -12,7 +12,7 @@ import diloenseña from '../diloenseña.png';
 function User() {
   const buttons = [
     { label: 'Estadísticas ', link: '/stats' },
-    { label: 'Tutorial', link: '/dudas' },
+    { label: 'Tutorial', link: '/tutorial' },
   ];
 
   return (

@@ -206,10 +206,9 @@ function CreateCategory() {
             />
           </label>
           <br />
-          <label>
+          <label style={{ marginLeft: '30px' }}>
           <strong>Es escaneable:</strong>
-          <br />
-            <input
+             <input
               type="checkbox"
               name="isscannable"
               checked={isscannable}

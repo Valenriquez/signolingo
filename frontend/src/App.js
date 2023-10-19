@@ -34,6 +34,8 @@ import Stats from './components/Stats';
 import UpdateCategory from './sidebar-options/UpdateCategory';
 import UpdateWord from './sidebar-options/UpdateWord';
 
+import Tutorial from './components/Tutorial';
+
 function App(){
   function ProtectedRoute({ element }) {
     const { isLoggedIn } = useAuth(); // Use your authentication context to check if the user is logged in
@@ -68,6 +70,7 @@ function App(){
           <Route path="/stats" element={<Stats/>} />
           <Route path="/update-category/:id" element={<UpdateCategory/>} />
           <Route path="/update-word/:id" element={<UpdateWord/>} />
+          <Route path="/tutorial" element={<Tutorial/>} />
         </Routes>
       </BrowserRouter>
     </React.Fragment>

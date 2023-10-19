@@ -4,7 +4,10 @@ import NavbarUser from '../components/NavbarUser';
 import Sidebar from '../components/Sidebar';
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { PieChart, Pie , Tooltip, Cell  } from 'recharts';
+import { PieChart, Pie, BarChart, Bar, XAxis, YAxis, Tooltip, Cell, Legend } from 'recharts';
+import './Stats.css'; // Import the CSS file
+
+
 
 function Stats() {
   const buttons = [
@@ -13,8 +16,6 @@ function Stats() {
 
   const [tracker, setTracker] = useState([]);
   const colors = ['#8884d8', '#82ca9d', '#ffc658', '#ff7300', '#0088aa'];
-
-
 
   useEffect(() => {
     axios.get('https://vc5kqp87-3000.usw3.devtunnels.ms/api/v1/tracker/getall')
@@ -36,16 +37,17 @@ function Stats() {
           <NavbarUser buttons={buttons} />
         </div>
        </div>
-      <div className="container">
-        <h1>Estadísticas</h1>
-         
+      <div className="container-stats">
+        <h1>Estadísticas y Gráficas</h1>  
           <ul>
             {tracker.map((item, index) => (
-              <div className='box'> <li key={index}>{item.counter} - {item.word}</li></div>
+              <div className='box'> <li key={index}>{item.word} aparece {item.counter} veces</li></div>
             ))}
           </ul>
 
-          <PieChart width={400} height={400}>
+          <div className='chart-container-pie'>  
+          
+          <PieChart width={900} height={900}>
           <Pie
             data={tracker}
             dataKey="counter" // Counter is used as the value for the chart
@@ -62,8 +64,18 @@ function Stats() {
           </Pie>
           <Tooltip />
         </PieChart>
+       
         
-      </div>
+         <BarChart width={400} height={300} data={tracker}>
+        <XAxis dataKey="word" />
+        <YAxis />
+        <Bar dataKey="counter" fill="#8884d8" />
+        <Tooltip />
+        <Legend />
+        </BarChart>
+        </div>
+
+       </div>
     </>
   );
 }
