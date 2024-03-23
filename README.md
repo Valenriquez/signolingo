@@ -1,4 +1,4 @@
 # signolingo
-Front-end Web App
-Falta Formato y que funcione la API  
-- start no jala lo 
+Web App to aid the "Dilo en señas" company, a non-profit organizaation that helps deaf people in Mexico. 
+
+ 
